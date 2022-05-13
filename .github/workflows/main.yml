@@ -40,7 +40,8 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v1.6
         with: 
           args: >
-            - Dsonar.projectKey=develop
+            -Dsonar.projectKey=develop
+            -Dsonar.organization=antobrines
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         
