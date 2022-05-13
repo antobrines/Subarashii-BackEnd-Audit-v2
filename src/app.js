@@ -14,7 +14,6 @@ app.use(morgan('tiny'));
 app.use(helmet());
 app.use(express.json());
 
-
 app.use((error, req, res, next) => {
   if (error instanceof SyntaxError) {
     errorF(error.message, error, 500, res, next);
