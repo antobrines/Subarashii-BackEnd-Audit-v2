@@ -8,7 +8,7 @@ const {
 
 const register = catchAsync(async (req, res, next) => {
   const userCreated = await userService.create(req.body);
-  successF('User Created', userCreated, 200, res, next);
+  successF('User Created', userCreated, httpStatus.OK, res, next);
 });
 
 const login = catchAsync(async (req, res, next) => {
@@ -17,13 +17,13 @@ const login = catchAsync(async (req, res, next) => {
     const error = new Error('L\'adresse mail ou le mot de passe est invalide');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
-    successF('La connexion à bien été effectué', varLogged, 200, res, next);
+    successF('La connexion à bien été effectué', varLogged, httpStatus.OK, res, next);
   }
 });
 
 const testConnection = catchAsync(async (req, res, next) => {
   const user = req.user;
-  successF('User', user, 200, res, next);
+  successF('User', user, httpStatus.OK, res, next);
 });
 
 
