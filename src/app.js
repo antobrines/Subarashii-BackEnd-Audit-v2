@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use((error, req, res, next) => {
   if (error instanceof SyntaxError) {
-    errorF(error.message, error, 500, res, next);
+    errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
     next();
   }
