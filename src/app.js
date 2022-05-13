@@ -14,7 +14,7 @@ app.use(morgan('tiny'));
 app.use(helmet());
 app.use(express.json());
 
-app.use((error, req, res, next) => {
+app.use((error, _req, res, next) => {
   if (error instanceof SyntaxError) {
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
@@ -25,7 +25,7 @@ app.use((error, req, res, next) => {
 app.use('/api', routes);
 
 // Routes to test the API
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.json({
     message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄👨‍🔧🐱‍🚀✌'
   });
