@@ -6,6 +6,7 @@ const router = express.Router();
 const {
   isConnected
 } = require('../middlewares/user.middleware');
+
 router.post(
   '/register',
   validate(authValidation.register),
