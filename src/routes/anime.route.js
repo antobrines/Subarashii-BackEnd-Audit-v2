@@ -6,5 +6,4 @@ router.get('/', animeController.getMultipleAnimes);
 router.get('/:id', animeController.getAnime);
 router.get('/:id/season/:season', animeController.getEpisodes);
 
-
 module.exports = router;
