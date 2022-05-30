@@ -32,15 +32,20 @@ const update = async (id, userdId, reqBody) => {
   });
 };
 
-const remove = async (id, userId) => {
+const remove = async (id, userId, isAdmin = false) => {
   const comment = await Comment.findOne({
     _id: id
   });
-  if (comment.userId !== userId) {
+  if (!comment) {
+    throw new Error('Comment not found');
+  }
+  if (comment.userId !== userId && !isAdmin) {
     throw new Error('You are not authorized to delete this comment');
   }
   return Comment.findOneAndDelete({
     _id: id
+  }, {
+    new: true
   });
 };
 
