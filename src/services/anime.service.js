@@ -9,8 +9,11 @@ const tmdbRequest = async url => {
   return await request.json();
 };
 
+const getMultiple = async ({ page = 1, categories = '16' }) => await tmdbRequest(`/discover/tv?with_genres=${categories}&original_language=ja&page=${page || 1}&language=fr-Fr&sort_by=original_title.asc&original_language=ja`);
+
 const getAnimeById = async id => await tmdbRequest(`/tv/${id}`);
 
 module.exports = {
+  getMultiple,
   getAnimeById
 };

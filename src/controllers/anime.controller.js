@@ -4,16 +4,18 @@ const {
   successF
 } = require('../utils/message');
 
-const getAll = (req, res) => {
-  res.send('not ok');
+const getMultiple = async (req, res, next) => {
+  const { page, categories } = req.query;
+  const animes = await animeService.getMultiple({ page, categories});
+  successF('Get multiple animes', animes, httpStatus.OK, res, next);
 };
 
 const getAnime = async (req, res, next) => {
   const anime = await animeService.getAnimeById(req.params.id);
-  successF('Anime recovered', anime, httpStatus.OK, res, next);
+  successF('Get anime', anime, httpStatus.OK, res, next);
 };
 
 module.exports = {
-  getAll,
+  getMultiple,
   getAnime
 };
