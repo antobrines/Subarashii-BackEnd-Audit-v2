@@ -4,6 +4,7 @@ const {
 } = require('../utils/message');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
+const userService = require('../services/user.service');
 
 
 
@@ -25,6 +26,32 @@ const isConnected = async (req, res, next) => {
   }
 };
 
+
+const isBanned = async (req, res, next) => {
+  const user = await userService.findOne(req);
+  if (user.banned) {
+    const err = new Error('Vous êtes banni');
+    return errorF(err.message, err, httpStatus.UNAUTHORIZED, res, next);
+  }
+  return next();
+};
+
+const isAdmin = async (req, res, next) => {
+  const user = await userService.findOne(req);
+  const userRoles = user.roles;
+  if (userRoles.includes('admin')) {
+    return next();
+  }
+  const err = new Error('Vous n\'avez pas les droits pour effectuer cette action');
+  return errorF(err.message, err, httpStatus.UNAUTHORIZED, res, next);
+};
+
+
+
+
+
 module.exports = {
-  isConnected
+  isConnected,
+  isBanned,
+  isAdmin
 };
