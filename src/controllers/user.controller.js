@@ -21,6 +21,17 @@ const login = catchAsync(async (req, res, next) => {
   }
 });
 
+const updatePassword = catchAsync(async (req, res, next) => {
+  const varLogged = await userService.updatePassword(req);
+  if (varLogged === 'Password do not match' || varLogged === 'Invalid Credentiel') {
+    const error = new Error("Le mot de passe renseigné ne correspond pas au précédent");
+    errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
+  } else {
+    console.log(res.status)
+    successF('Le mot de passe a bien été modifié', varLogged, httpStatus.OK, res, next);
+  }
+});
+
 const testConnection = catchAsync(async (req, res, next) => {
   const user = req.user;
   successF('User', user, httpStatus.OK, res, next);
@@ -30,5 +41,6 @@ const testConnection = catchAsync(async (req, res, next) => {
 module.exports = {
   register,
   login,
-  testConnection
+  testConnection,
+  updatePassword
 };
