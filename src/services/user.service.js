@@ -63,9 +63,9 @@ const login = async (req) => {
   }
 };
 
-const getUser = async (req) => {
+const findOneById = async (req) => {
   const user = await User.findOne({
-    email: req.body.email
+    _id: req.user.userId
   });
   return user;
 };
@@ -75,5 +75,5 @@ module.exports = {
   create,
   userValidate,
   login,
-  getUser
+  findOneById
 };

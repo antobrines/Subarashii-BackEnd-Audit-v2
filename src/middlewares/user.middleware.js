@@ -28,7 +28,7 @@ const isConnected = async (req, res, next) => {
 
 
 const isBanned = async (req, res, next) => {
-  const user = await userService.findOne(req);
+  const user = await userService.findOneById(req);
   if (user.banned) {
     const err = new Error('Vous êtes banni');
     return errorF(err.message, err, httpStatus.UNAUTHORIZED, res, next);
