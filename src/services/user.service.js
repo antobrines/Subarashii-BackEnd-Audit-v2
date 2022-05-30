@@ -63,8 +63,17 @@ const login = async (req) => {
   }
 };
 
+const getUser = async (req) => {
+  const user = await User.findOne({
+    _id: req.user.userId
+  });
+  return user;
+};
+
+
 module.exports = {
   create,
   findOneAndUpdate,
-  login
+  login,
+  getUser
 };
