@@ -4,7 +4,8 @@ const authValidation = require('../validations/user.validation');
 const validate = require('../middlewares/validate');
 const router = express.Router();
 const {
-  isConnected
+  isConnected,
+  isBanned
 } = require('../middlewares/user.middleware');
 
 router.post(
@@ -13,7 +14,7 @@ router.post(
   userController.register
 );
 router.post('/login', validate(authValidation.login), userController.login);
-router.get('/test-connection', isConnected, userController.testConnection);
+router.get('/test-connection', [isConnected, isBanned], userController.testConnection);
 
 
 module.exports = router;
