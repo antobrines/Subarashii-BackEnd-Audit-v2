@@ -5,8 +5,8 @@ const {
 } = require('../utils/message');
 
 const getMultipleAnimes = async (req, res, next) => {
-  const { page, categories } = req.query;
-  const animes = await animeService.getMultipleAnimes({ page, categories});
+  const { page, categories, adult, status } = req.query;
+  const animes = await animeService.getMultipleAnimes({ page, categories, adult, status});
   successF('Get multiple animes', animes, httpStatus.OK, res, next);
 };
 
