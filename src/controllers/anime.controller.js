@@ -4,18 +4,26 @@ const {
   successF
 } = require('../utils/message');
 
-const getMultiple = async (req, res, next) => {
+const getMultipleAnimes = async (req, res, next) => {
   const { page, categories } = req.query;
-  const animes = await animeService.getMultiple({ page, categories});
+  const animes = await animeService.getMultipleAnimes({ page, categories});
   successF('Get multiple animes', animes, httpStatus.OK, res, next);
 };
 
 const getAnime = async (req, res, next) => {
-  const anime = await animeService.getAnimeById(req.params.id);
+  const { id } = req.params;
+  const anime = await animeService.getAnimeById(id);
   successF('Get anime', anime, httpStatus.OK, res, next);
 };
 
+const getEpisodes = async (req, res, next) => {
+  const { id, season } = req.params;
+  const episodes = await animeService.getEpisodes({ id, season });
+  successF(`Get episodes of season ${season}` , episodes, httpStatus.OK, res, next);
+};
+
 module.exports = {
-  getMultiple,
-  getAnime
+  getMultipleAnimes,
+  getAnime,
+  getEpisodes
 };
