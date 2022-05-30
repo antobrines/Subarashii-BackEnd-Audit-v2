@@ -70,10 +70,35 @@ const findOneById = async (req) => {
   return user;
 };
 
+const ban = async (userId) => {
+  const user = await User.findOneAndUpdate({
+    _id: userId
+  }, {
+    banned: true
+  }, {
+    new: true
+  });
+  return user;
+};
+
+const unban = async (userId) => {
+  const user = await User.findOneAndUpdate({
+    _id: userId
+  }, {
+    banned: false
+  }, {
+    new: true
+  });
+  return user;
+};
+
+
 
 module.exports = {
   create,
   userValidate,
   login,
-  findOneById
+  findOneById,
+  ban,
+  unban
 };
