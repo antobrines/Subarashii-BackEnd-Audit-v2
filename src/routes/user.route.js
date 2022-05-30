@@ -15,6 +15,7 @@ router.post(
 );
 router.post('/login', validate(authValidation.login), userController.login);
 router.get('/test-connection', [isConnected, isBanned], userController.testConnection);
+router.put('/password', [isConnected, validate(authValidation.updatePassword)], userController.updatePassword)
 
 
 module.exports = router;
