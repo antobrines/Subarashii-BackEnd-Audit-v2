@@ -5,10 +5,10 @@ const animeRoute = require('./anime.route');
 const router = express.Router();
 
 const defaultRoutes = [{
-  path: '/user',
+  path: '/users',
   route: userRoute,
 }, {
-  path: '/anime',
+  path: '/animes',
   route: animeRoute,
 }];
 
