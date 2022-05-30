@@ -11,9 +11,9 @@ const create = async (userBody) => {
   return User.create(userBody);
 };
 
-const findOneAndUpdate = async (email_user) => {
+const userValidate = async (req) => {
   const filter = {
-    email: email_user
+    email: req.body.email
   };
   const update = {
     is_validate: true
@@ -73,7 +73,7 @@ const getUser = async (req) => {
 
 module.exports = {
   create,
-  findOneAndUpdate,
+  userValidate,
   login,
   getUser
 };
