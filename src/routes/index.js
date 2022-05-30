@@ -1,12 +1,12 @@
 /* eslint-disable indent */
 const express = require('express');
-const authRoute = require('./user.route');
+const userRoute = require('./user.route');
 const animeRoute = require('./anime.route');
 const router = express.Router();
 
 const defaultRoutes = [{
   path: '/user',
-  route: authRoute,
+  route: userRoute,
 }, {
   path: '/anime',
   route: animeRoute,
