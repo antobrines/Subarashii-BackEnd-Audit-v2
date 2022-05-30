@@ -65,7 +65,7 @@ const login = async (req) => {
 
 const getUser = async (req) => {
   const user = await User.findOne({
-    _id: req.user.userId
+    email: req.body.email
   });
   return user;
 };
