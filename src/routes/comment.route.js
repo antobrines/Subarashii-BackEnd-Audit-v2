@@ -1,11 +1,13 @@
 const express = require('express');
 const commentController = require('../controllers/comment.controller');
+const adminController = require('../controllers/admin.controller');
 const commentValidation = require('../validations/comment.validation');
 const validate = require('../middlewares/validate');
 const router = express.Router();
 const {
   isConnected,
-  isBanned
+  isBanned,
+  isAdmin
 } = require('../middlewares/user.middleware');
 
 router.post(
@@ -32,7 +34,12 @@ router.get(
   commentController.getAllCommentByAnimeId
 );
 
-module.exports = router;
+// admin controller, removeComment
+router.delete(
+  '/remove/:id',
+  [isConnected, isAdmin],
+  adminController.removeComment
+);
 
 
 module.exports = router;
