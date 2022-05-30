@@ -63,6 +63,29 @@ const login = async (req) => {
   }
 };
 
+const updatePassword = async (req) => {
+  const user = req.user
+
+  const filter = {
+    _id: user.userId
+  };
+
+  const userFromDB = await User.findOne(filter)
+  // console.log(req.body)
+  console.log(userFromDB.password)
+
+  const hasSamePassword = await compareAsync(req.body.previousPassword, userFromDB.password);
+
+  if(hasSamePassword === false){
+    return "Password do not match"
+  }
+
+  userFromDB.password = bcrypt.hashSync(req.body.password, 10)
+
+  await userFromDB.save()
+
+};
+
 const findOneById = async (req) => {
   const user = await User.findOne({
     _id: req.user.userId
@@ -70,10 +93,10 @@ const findOneById = async (req) => {
   return user;
 };
 
-
 module.exports = {
   create,
   userValidate,
   login,
-  findOneById
+  findOneById,
+  updatePassword
 };
