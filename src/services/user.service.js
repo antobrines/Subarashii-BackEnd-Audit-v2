@@ -115,14 +115,9 @@ const generateResetPasswordKey = async (requestBody) => {
 }
 
 const me = async (req) => {
-  let user = await User.findOne({
+  return User.findOne({
     _id: req.user.userId
-  })
-
-  user.roles = undefined
-  user.password = undefined
-
-  return user
+  }, {roles: 0, password: 0})
 }
 
 const resetPassword = async (requestBody) => {
