@@ -24,7 +24,6 @@ const isConnected = async (req, res, next) => {
   }
 };
 
-
 const isBanned = async (req, res, next) => {
   const user = await userService.findOneById(req);
   if (user.banned) {

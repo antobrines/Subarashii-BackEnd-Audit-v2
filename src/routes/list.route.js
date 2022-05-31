@@ -8,13 +8,19 @@ const router = express.Router();
 router.post(
   '/',
   [ isConnected, validate(listValidation.create) ],
-  listController.create
+  listController.createList
 );
 
-router.put(
+router.patch(
   '/:listId',
   [ isConnected, validate(listValidation.update) ],
-  listController.update
+  listController.updateList
+);
+
+router.delete(
+  '/:listId',
+  [ isConnected ],
+  listController.deleteList
 );
 
 module.exports = router;

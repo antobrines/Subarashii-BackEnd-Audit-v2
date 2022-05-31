@@ -5,7 +5,7 @@ const {
   successF
 } = require('../utils/message');
 
-const create = catchAsync(async (req, res, next) => {
+const createList = catchAsync(async (req, res, next) => {
   const list = await listService.create({ 
     owner: req.user.userId,
     ...req.body
@@ -13,14 +13,23 @@ const create = catchAsync(async (req, res, next) => {
   successF('List created', list, httpStatus.OK, res, next);
 });
 
-const update = catchAsync(async (req, res, next) => {
+const updateList = catchAsync(async (req, res, next) => {
   const { listId } = req.params;
+  const { userId } = req.user;
   const { animeId } = req.body;
-  const list = await listService.update(listId, animeId);
+  const list = await listService.update({ listId, animeId, userId });
   successF('List updated', list, httpStatus.OK, res, next);
 });
 
+const deleteList = catchAsync(async (req, res, next) => {
+  const { userId } = req.user;
+  const { listId } = req.params;
+  await listService.remove({ listId, userId });
+  successF('List deleted', {}, httpStatus.OK, res, next);
+});
+
 module.exports = {
-  create,
-  update,
+  createList,
+  updateList,
+  deleteList,
 };
