@@ -4,6 +4,8 @@ const {
 const bcrypt = require('bcryptjs');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
+const {setSpecificCacheValue, getSpecificCacheValue} = require("../cache/memoryCache");
+const {randomString} = require("../utils/random");
 
 const create = async (userBody) => {
   if (userBody.password)
@@ -93,10 +95,36 @@ const findOneById = async (req) => {
   return user;
 };
 
+const generateResetPasswordKey = async (requestBody) => {
+  let filter = {
+    email: requestBody.email
+  }
+
+  let user = await User.findOne(filter)
+
+  if(user) {
+    console.log(user.email)
+    setSpecificCacheValue(["resetPasswordCache", user.email], randomString(64))
+    console.log(getSpecificCacheValue(["resetPasswordCache", user.email]))
+  }
+}
+
+const resetPassword = async (requestBody) => {
+  let filter = {
+    email: requestBody.email
+  }
+
+  let user = User.findOne(filter)
+
+  return "L'utilisateur a été modifié avec succès"
+}
+
 module.exports = {
   create,
   userValidate,
   login,
   findOneById,
-  updatePassword
+  updatePassword,
+  generateResetPasswordKey,
+  resetPassword
 };
