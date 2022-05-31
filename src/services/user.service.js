@@ -90,10 +90,9 @@ const updatePassword = async (req) => {
 };
 
 const findOneById = async (req) => {
-  const user = await User.findOne({
+  return await User.findOne({
     _id: req.user.userId
   });
-  return user;
 };
 
 const generateResetPasswordKey = async (requestBody) => {
@@ -148,6 +147,28 @@ const resetPassword = async (requestBody) => {
   }
 }
 
+const ban = async (userId) => {
+  return await User.findOneAndUpdate({
+    _id: userId
+  }, {
+    banned: true
+  }, {
+    new: true
+  });
+};
+
+const unban = async (userId) => {
+  return await User.findOneAndUpdate({
+    _id: userId
+  }, {
+    banned: false
+  }, {
+    new: true
+  });
+};
+
+
+
 module.exports = {
   create,
   userValidate,
@@ -156,5 +177,7 @@ module.exports = {
   updatePassword,
   generateResetPasswordKey,
   resetPassword,
-  me
+  me,
+  ban,
+  unban
 };
