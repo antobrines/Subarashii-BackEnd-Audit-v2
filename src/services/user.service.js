@@ -114,6 +114,17 @@ const generateResetPasswordKey = async (requestBody) => {
   }
 }
 
+const me = async (req) => {
+  let user = await User.findOne({
+    _id: req.user.userId
+  })
+
+  user.roles = undefined
+  user.password = undefined
+
+  return user
+}
+
 const resetPassword = async (requestBody) => {
   let filter = {
     email: requestBody.email
@@ -144,5 +155,6 @@ module.exports = {
   findOneById,
   updatePassword,
   generateResetPasswordKey,
-  resetPassword
+  resetPassword,
+  me
 };

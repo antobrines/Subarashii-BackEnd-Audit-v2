@@ -46,17 +46,17 @@ const resetPassword = catchAsync(async (req, res, next) => {
   successF('Le mot de passe a bien été modifié', varLogged, httpStatus.OK, res, next);
 })
 
-const testConnection = catchAsync(async (req, res, next) => {
-  const user = req.user;
-  successF('User', user, httpStatus.OK, res, next);
-});
+const me = catchAsync(async (req, res, next) => {
+  const user = await userService.me(req);
+  successF('user', user, httpStatus.OK, res, next);
+})
 
 
 module.exports = {
   register,
   login,
-  testConnection,
   updatePassword,
   generateResetPasswordKey,
-  resetPassword
+  resetPassword,
+  me
 };
