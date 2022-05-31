@@ -10,13 +10,9 @@ module.exports = function () {
             for(let i=0; i<keys.length; i++){
                 let key = keys[i]
                 if(keys.length-1 === i){
-                    console.log(1)
                     currentCache[key] = value
-                    console.log(2)
                 }else if(!Object.keys(currentCache).includes(key)) {
-                    console.log(3)
                     currentCache[key] = {}
-                    console.log(4)
                 }
                 currentCache = currentCache[key]
             }
@@ -28,7 +24,7 @@ module.exports = function () {
                 if(keys.length-1 === i){
                     return currentCache[key]
                 }else if(!Object.keys(currentCache).includes(key)) {
-                    return Error("Key " + key + " doesn't exist")
+                    return null
                 }
                 currentCache = currentCache[key]
             }
