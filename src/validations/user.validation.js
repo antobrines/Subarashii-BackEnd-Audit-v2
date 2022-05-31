@@ -1,6 +1,4 @@
 const Joi = require('joi');
-const NodeCache = require("node-cache");
-const cache = require('../cache/memoryCache');
 
 const register = {
   body: Joi.object().keys({
