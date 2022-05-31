@@ -12,5 +12,6 @@ module.exports = {
   token: {
     secret: process.env.TOKEN_SECRET,
     expire: process.env.TOKEN_EXPIRE
-  }
+  },
+  apiToken: process.env.API_TOKEN
 };
