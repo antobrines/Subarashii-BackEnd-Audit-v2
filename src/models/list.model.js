@@ -14,8 +14,7 @@ const listSchema = new mongoose.Schema({
     ref: 'User',
   },
   animes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Anime',
+    type: String,
     default: [],
   }]
 });

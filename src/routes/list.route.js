@@ -7,11 +7,14 @@ const router = express.Router();
 
 router.post(
   '/',
-  [
-    isConnected,
-    validate(listValidation.create),
-  ],
+  [ isConnected, validate(listValidation.create) ],
   listController.create
+);
+
+router.put(
+  '/:listId',
+  [ isConnected, validate(listValidation.update) ],
+  listController.update
 );
 
 module.exports = router;

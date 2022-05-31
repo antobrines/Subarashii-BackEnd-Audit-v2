@@ -13,6 +13,14 @@ const create = catchAsync(async (req, res, next) => {
   successF('List created', list, httpStatus.OK, res, next);
 });
 
+const update = catchAsync(async (req, res, next) => {
+  const { listId } = req.params;
+  const { animeId } = req.body;
+  const list = await listService.update(listId, animeId);
+  successF('List updated', list, httpStatus.OK, res, next);
+});
+
 module.exports = {
   create,
+  update,
 };

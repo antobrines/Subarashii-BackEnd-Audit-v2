@@ -7,6 +7,13 @@ const create = {
   })
 };
 
+const update = {
+  body: Joi.object().keys({
+    animeId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
-  create
+  create,
+  update
 };
