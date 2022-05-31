@@ -4,7 +4,10 @@ const {
 const bcrypt = require('bcryptjs');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
-const {setSpecificCacheValue, getSpecificCacheValue} = require("../cache/memoryCache");
+const {
+  setSpecificCacheValue,
+  getSpecificCacheValue
+} = require("../cache/memoryCache");
 const {randomString} = require("../utils/random");
 const {sendMail} = require("../utils/mailer");
 
