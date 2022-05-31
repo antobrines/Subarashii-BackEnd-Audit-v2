@@ -6,6 +6,7 @@ const config = require('../config');
 const jwt = require('jsonwebtoken');
 const {setSpecificCacheValue, getSpecificCacheValue} = require("../cache/memoryCache");
 const {randomString} = require("../utils/random");
+const {sendMail} = require("../utils/mailer");
 
 const create = async (userBody) => {
   if (userBody.password)
@@ -103,8 +104,12 @@ const generateResetPasswordKey = async (requestBody) => {
   let user = await User.findOne(filter)
 
   if(user) {
-    console.log(user.email)
-    setSpecificCacheValue(["resetPasswordCache", user.email], randomString(64))
+    let key = randomString(64)
+    setSpecificCacheValue(["resetPasswordCache", user.email], key)
+    await sendMail(
+        user.email,
+        "[Subarashii] Reset password",
+        "<p>Reset password key : " + key + " </p>")
     console.log(getSpecificCacheValue(["resetPasswordCache", user.email]))
   }
 }
@@ -114,9 +119,22 @@ const resetPassword = async (requestBody) => {
     email: requestBody.email
   }
 
-  let user = User.findOne(filter)
+  let user = await User.findOne(filter)
 
-  return "L'utilisateur a été modifié avec succès"
+  console.log(user)
+
+  let resetPasswordKey = getSpecificCacheValue(["resetPasswordCache", user.email])
+  console.log(resetPasswordKey)
+
+  if(resetPasswordKey && user && resetPasswordKey === requestBody.key) {
+    user.password = bcrypt.hashSync(requestBody.password, 10)
+    user.save()
+    return "Password of user has been reset"
+  }else if(!resetPasswordKey){
+    return "Reset password key is invalid"
+  }else{
+    return "Invalid credential"
+  }
 }
 
 module.exports = {
