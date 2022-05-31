@@ -90,7 +90,7 @@ const updatePassword = async (req) => {
 };
 
 const findOneById = async (req) => {
-  return await User.findOne({
+  return User.findOne({
     _id: req.user.userId
   });
 };
