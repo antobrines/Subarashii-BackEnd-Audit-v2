@@ -23,8 +23,11 @@ const login = catchAsync(async (req, res, next) => {
 
 const updatePassword = catchAsync(async (req, res, next) => {
   const varLogged = await userService.updatePassword(req);
-  if (varLogged === 'Password do not match' || varLogged === 'Invalid Credentiel') {
+  if (varLogged === "Password do not match") {
     const error = new Error("Le mot de passe renseigné ne correspond pas au précédent");
+    errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
+  }else if(varLogged === "Error when saving password"){
+    const error = new Error("Une erreur est survenue lors de la mise à jour");
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
     console.log(res.status)
@@ -39,7 +42,7 @@ const generateResetPasswordKey = catchAsync(async (req, res, next) => {
 
 const resetPassword = catchAsync(async (req, res, next) => {
   const varLogged = await userService.resetPassword(req.body);
-  if(["Reset password key is invalid", "Invalid credential"].includes(varLogged)){
+  if(["Reset password key is invalid", "Invalid credential", "Error when saving new password"].includes(varLogged)){
     const error = new Error("La clé n'existe pas ou les informations saisies sont incorrect");
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   }

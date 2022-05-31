@@ -4,10 +4,7 @@ const {
 const bcrypt = require('bcryptjs');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
-const {
-  setSpecificCacheValue,
-  getSpecificCacheValue
-} = require("../cache/memoryCache");
+const memoryCache = require("../cache/memoryCache");
 const {randomString} = require("../utils/random");
 const {sendMail} = require("../utils/mailer");
 
@@ -77,8 +74,6 @@ const updatePassword = async (req) => {
   };
 
   const userFromDB = await User.findOne(filter)
-  // console.log(req.body)
-  console.log(userFromDB.password)
 
   const hasSamePassword = await compareAsync(req.body.previousPassword, userFromDB.password);
 
@@ -88,8 +83,10 @@ const updatePassword = async (req) => {
 
   userFromDB.password = bcrypt.hashSync(req.body.password, 10)
 
-  await userFromDB.save()
-
+  const success = await userFromDB.save()
+  if(!success){
+    return "Error when saving password"
+  }
 };
 
 const findOneById = async (req) => {
@@ -100,20 +97,20 @@ const findOneById = async (req) => {
 };
 
 const generateResetPasswordKey = async (requestBody) => {
-  let filter = {
+  const filter = {
     email: requestBody.email
   }
 
   let user = await User.findOne(filter)
 
   if(user) {
-    let key = randomString(64)
-    setSpecificCacheValue(["resetPasswordCache", user.email], key)
+    const key = randomString(64)
+    memoryCache.setSpecificCacheValue(["resetPasswordCache", user.email], key)
     await sendMail(
         user.email,
         "[Subarashii] Reset password",
         "<p>Reset password key : " + key + " </p>")
-    console.log(getSpecificCacheValue(["resetPasswordCache", user.email]))
+    console.log(memoryCache.getSpecificCacheValue(["resetPasswordCache", user.email]))
   }
 }
 
@@ -129,21 +126,22 @@ const me = async (req) => {
 }
 
 const resetPassword = async (requestBody) => {
-  let filter = {
+  const filter = {
     email: requestBody.email
   }
 
   let user = await User.findOne(filter)
 
-  console.log(user)
-
-  let resetPasswordKey = getSpecificCacheValue(["resetPasswordCache", user.email])
-  console.log(resetPasswordKey)
+  const resetPasswordKey = memoryCache.getSpecificCacheValue(["resetPasswordCache", user.email])
 
   if(resetPasswordKey && user && resetPasswordKey === requestBody.key) {
     user.password = bcrypt.hashSync(requestBody.password, 10)
-    user.save()
-    return "Password of user has been reset"
+    const success = await user.save()
+    if(success){
+      return "Password of user has been reset"
+    }else{
+      return "Error when saving new password"
+    }
   }else if(!resetPasswordKey){
     return "Reset password key is invalid"
   }else{
