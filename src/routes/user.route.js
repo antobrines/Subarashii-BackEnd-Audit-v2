@@ -14,7 +14,7 @@ router.post(
   userController.register
 );
 router.post('/login', validate(authValidation.login), userController.login);
-router.get('/test-connection', [isConnected, isBanned], userController.testConnection);
+router.get('/me', [isConnected, isBanned], userController.me);
 router.put('/password', [isConnected, validate(authValidation.updatePassword)], userController.updatePassword)
 
 router.post('/password/reset/key', validate(authValidation.generateResetPasswordKey), userController.generateResetPasswordKey)
