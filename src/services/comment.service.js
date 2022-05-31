@@ -42,11 +42,12 @@ const remove = async (id, userId, isAdmin = false) => {
   if (comment.userId !== userId && !isAdmin) {
     throw new Error('You are not authorized to delete this comment');
   }
-  return Comment.findOneAndDelete({
+  await Comment.findOneAndDelete({
     _id: id
   }, {
     new: true
   });
+  return true;
 };
 
 const getAllCommentByAnimeId = async (animeId) => {
