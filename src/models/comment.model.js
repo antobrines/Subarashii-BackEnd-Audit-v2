@@ -23,6 +23,14 @@ const commentSchema = mongoose.Schema({
     type: types.Date,
     default: null,
   },
+  likedUsers: {
+    type: [types.String],
+    default: [],
+  },
+  dislikedUsers: {
+    type: [types.String],
+    default: [],
+  },
 });
 
 const Comment = mongoose.model('Comment', commentSchema);

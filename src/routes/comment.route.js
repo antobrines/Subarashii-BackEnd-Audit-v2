@@ -34,11 +34,22 @@ router.get(
   commentController.getAllCommentByAnimeId
 );
 
-// admin controller, removeComment
 router.delete(
   '/remove/:id',
   [isConnected, isAdmin],
   adminController.removeComment
+);
+
+router.patch(
+  '/:id/like',
+  [isConnected, isBanned],
+  commentController.likeComment
+);
+
+router.patch(
+  '/:id/unlike',
+  [isConnected, isBanned],
+  commentController.dislikeComment
 );
 
 
