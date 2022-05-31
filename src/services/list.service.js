@@ -1,6 +1,6 @@
 const List = require('../models/list.model');
 
-const create = async list => await List.create(list);
+const create = async list => List.create(list);
 
 const createDefault = async userId => {
   const defaultLists = [
@@ -26,7 +26,7 @@ const update = async ({ listId, animeId, userId, action }) => {
   } else if (action === 'remove') {
     list.animes.filter(id => id !== animeId);
   }
-  return await list.save();
+  return list.save();
 };
 
 const remove = async ({ listId, userId }) => {
@@ -37,6 +37,7 @@ const remove = async ({ listId, userId }) => {
   if (!list.owner.equals(userId) || !list.deletable) {
     throw new Error('You cannot delete this list');
   }
+  await list.remove();
 };
 
 module.exports = {
