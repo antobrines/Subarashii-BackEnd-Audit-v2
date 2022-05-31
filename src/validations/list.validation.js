@@ -10,6 +10,7 @@ const create = {
 const update = {
   body: Joi.object().keys({
     animeId: Joi.string().required(),
+    action: Joi.string().valid('add', 'remove').required(),
   }),
 };
 

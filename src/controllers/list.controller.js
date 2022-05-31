@@ -16,8 +16,8 @@ const createList = catchAsync(async (req, res, next) => {
 const updateList = catchAsync(async (req, res, next) => {
   const { listId } = req.params;
   const { userId } = req.user;
-  const { animeId } = req.body;
-  const list = await listService.update({ listId, animeId, userId });
+  const { animeId, action } = req.body;
+  const list = await listService.update({ listId, animeId, userId, action });
   successF('List updated', list, httpStatus.OK, res, next);
 });
 

@@ -13,8 +13,7 @@ const createDefault = async userId => {
   await List.insertMany(defaultLists);
 };
 
-const update = async ({ listId, animeId, userId }) => {
-  console.log(listId, animeId);
+const update = async ({ listId, animeId, userId, action }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -22,7 +21,11 @@ const update = async ({ listId, animeId, userId }) => {
   if (!list.owner.equals(userId)) {
     throw new Error('You cannot update this list');
   }
-  list.animes.push(animeId);
+  if (action === 'add') {
+    list.animes.push(animeId);
+  } else if (action === 'remove') {
+    list.animes.filter(id => id !== animeId);
+  }
   return await list.save();
 };
 
