@@ -132,6 +132,7 @@ const resetPassword = async (requestBody) => {
     user.password = bcrypt.hashSync(requestBody.password, 10);
     const success = await user.save();
     if(success){
+      memoryCache.deleteSpecificCacheValue(['resetPasswordCache', user.email]);
       return 'Password of user has been reset';
     }else{
       return 'Error when saving new password';
@@ -144,7 +145,7 @@ const resetPassword = async (requestBody) => {
 };
 
 const ban = async (userId) => {
-  return await User.findOneAndUpdate({
+  return User.findOneAndUpdate({
     _id: userId
   }, {
     banned: true
@@ -154,7 +155,7 @@ const ban = async (userId) => {
 };
 
 const unban = async (userId) => {
-  return await User.findOneAndUpdate({
+  return User.findOneAndUpdate({
     _id: userId
   }, {
     banned: false
