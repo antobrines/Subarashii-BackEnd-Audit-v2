@@ -2,6 +2,17 @@ const List = require('../models/list.model');
 
 const create = async list => await List.create(list);
 
+const createDefault = async userId => {
+  const defaultLists = [
+    { label: 'À voir', deletable: false, owner: userId },
+    { label: 'En cours', deletable: false, owner: userId },
+    { label: 'Terminée', deletable: false, owner: userId },
+    { label: 'En attente', deletable: false, owner: userId },
+    { label: 'Favoris', deletable: false, owner: userId },
+  ];
+  await List.insertMany(defaultLists);
+};
+
 const update = async ({ listId, animeId, userId }) => {
   console.log(listId, animeId);
   const list = await List.findById(listId);
@@ -27,6 +38,7 @@ const remove = async ({ listId, userId }) => {
 
 module.exports = {
   create,
+  createDefault,
   update,
   remove,
 };

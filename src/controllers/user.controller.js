@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const userService = require('../services/user.service');
+const listService = require('../services/list.service');
 const httpStatus = require('http-status');
 const {
   errorF,
@@ -8,6 +9,7 @@ const {
 
 const register = catchAsync(async (req, res, next) => {
   const userCreated = await userService.create(req.body);
+  await listService.createDefault(userCreated._id);
   successF('User Created', userCreated, httpStatus.OK, res, next);
 });
 
