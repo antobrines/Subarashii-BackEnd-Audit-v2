@@ -32,6 +32,16 @@ const updatePassword = catchAsync(async (req, res, next) => {
   }
 });
 
+const generateResetPasswordKey = catchAsync(async (req, res, next) => {
+  const varLogged = await userService.generateResetPasswordKey(req.body);
+  successF('Si l\'email saisi existe, il recevra un email avec un lien pour reset son mot de passe !', varLogged, httpStatus.OK, res, next);
+})
+
+const resetPassword = catchAsync(async (req, res, next) => {
+  const varLogged = await userService.resetPassword(req);
+  successF('Le mot de passe a bien été modifié', varLogged, httpStatus.OK, res, next);
+})
+
 const testConnection = catchAsync(async (req, res, next) => {
   const user = req.user;
   successF('User', user, httpStatus.OK, res, next);
@@ -42,5 +52,7 @@ module.exports = {
   register,
   login,
   testConnection,
-  updatePassword
+  updatePassword,
+  generateResetPasswordKey,
+  resetPassword
 };
