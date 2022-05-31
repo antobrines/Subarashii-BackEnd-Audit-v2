@@ -1,4 +1,6 @@
 const Joi = require('joi');
+const NodeCache = require("node-cache");
+const cache = require('../cache/memoryCache');
 
 const register = {
   body: Joi.object().keys({
@@ -27,8 +29,25 @@ const updatePassword = {
   })
 }
 
+const resetPassword = {
+  body: Joi.object().keys({
+    key: Joi.string().required(),
+    email: Joi.string().email(),
+    password: Joi.string().trim().min(6).required(),
+    confirmPassword: Joi.string().valid(Joi.ref('password')).required()
+  })
+}
+
+const generateResetPasswordKey = {
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+  })
+}
+
 module.exports = {
   register,
   login,
-  updatePassword
+  updatePassword,
+  generateResetPasswordKey,
+  resetPassword
 };
