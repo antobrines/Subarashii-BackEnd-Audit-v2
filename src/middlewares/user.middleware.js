@@ -34,7 +34,7 @@ const isBanned = async (req, res, next) => {
 };
 
 const isAdmin = async (req, res, next) => {
-  const user = await userService.findOne(req);
+  const user = await userService.findOneById(req);
   const userRoles = user.roles;
   if (userRoles.includes('admin')) {
     return next();
