@@ -4,9 +4,9 @@ const {
 const bcrypt = require('bcryptjs');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
-const memoryCache = require("../cache/memoryCache");
-const {randomString} = require("../utils/random");
-const {sendMail} = require("../utils/mailer");
+const memoryCache = require('../cache/memoryCache');
+const {randomString} = require('../utils/random');
+const {sendMail} = require('../utils/mailer');
 
 const create = async (userBody) => {
   if (userBody.password)
@@ -67,25 +67,25 @@ const login = async (req) => {
 };
 
 const updatePassword = async (req) => {
-  const user = req.user
+  const user = req.user;
 
   const filter = {
     _id: user.userId
   };
 
-  const userFromDB = await User.findOne(filter)
+  const userFromDB = await User.findOne(filter);
 
   const hasSamePassword = await compareAsync(req.body.previousPassword, userFromDB.password);
 
   if(hasSamePassword === false){
-    return "Password do not match"
+    return 'Password do not match';
   }
 
-  userFromDB.password = bcrypt.hashSync(req.body.password, 10)
+  userFromDB.password = bcrypt.hashSync(req.body.password, 10);
 
-  const success = await userFromDB.save()
+  const success = await userFromDB.save();
   if(!success){
-    return "Error when saving password"
+    return 'Error when saving password';
   }
 };
 
@@ -98,50 +98,50 @@ const findOneById = async (req) => {
 const generateResetPasswordKey = async (requestBody) => {
   const filter = {
     email: requestBody.email
-  }
+  };
 
-  let user = await User.findOne(filter)
+  let user = await User.findOne(filter);
 
   if(user) {
-    const key = randomString(64)
-    memoryCache.setSpecificCacheValue(["resetPasswordCache", user.email], key)
+    const key = randomString(64);
+    memoryCache.setSpecificCacheValue(['resetPasswordCache', user.email], key);
     await sendMail(
-        user.email,
-        "[Subarashii] Reset password",
-        "<p>Reset password key : " + key + " </p>")
-    console.log(memoryCache.getSpecificCacheValue(["resetPasswordCache", user.email]))
+      user.email,
+      '[Subarashii] Reset password',
+      '<p>Reset password key : ' + key + ' </p>');
+    console.log(memoryCache.getSpecificCacheValue(['resetPasswordCache', user.email]));
   }
-}
+};
 
 const me = async (req) => {
   return User.findOne({
     _id: req.user.userId
-  }, {roles: 0, password: 0})
-}
+  }, {roles: 0, password: 0});
+};
 
 const resetPassword = async (requestBody) => {
   const filter = {
     email: requestBody.email
-  }
+  };
 
-  let user = await User.findOne(filter)
+  let user = await User.findOne(filter);
 
-  const resetPasswordKey = memoryCache.getSpecificCacheValue(["resetPasswordCache", user.email])
+  const resetPasswordKey = memoryCache.getSpecificCacheValue(['resetPasswordCache', user.email]);
 
   if(resetPasswordKey && user && resetPasswordKey === requestBody.key) {
-    user.password = bcrypt.hashSync(requestBody.password, 10)
-    const success = await user.save()
+    user.password = bcrypt.hashSync(requestBody.password, 10);
+    const success = await user.save();
     if(success){
-      return "Password of user has been reset"
+      return 'Password of user has been reset';
     }else{
-      return "Error when saving new password"
+      return 'Error when saving new password';
     }
   }else if(!resetPasswordKey){
-    return "Reset password key is invalid"
+    return 'Reset password key is invalid';
   }else{
-    return "Invalid credential"
+    return 'Invalid credential';
   }
-}
+};
 
 const ban = async (userId) => {
   return await User.findOneAndUpdate({
