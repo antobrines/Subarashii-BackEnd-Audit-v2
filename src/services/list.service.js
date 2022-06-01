@@ -29,7 +29,7 @@ const createDefault = async userId => {
   await List.insertMany(defaultLists);
 };
 
-const update = async ({ listId, animeId, userId, action }) => {
+const update = async ({ listId, animeId, animeCategories, userId, action }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -38,9 +38,18 @@ const update = async ({ listId, animeId, userId, action }) => {
     throw new Error('You cannot update this list');
   }
   if (action === 'add') {
-    list.animes.push(animeId);
+    if (list.animes.find(a => a.get('id') === animeId)) {
+      throw new Error('Anime already in list');
+    }
+    list.animes.push({
+      id: animeId,
+      categories: [ ...animeCategories ],
+      episodesWatched: 0,
+      minutesWatched: 0,
+    });
   } else if (action === 'remove') {
-    list.animes.filter(id => id !== animeId);
+    list.animes = list.animes.filter(a => a.get('id') !== animeId);
+    
   }
   return list.save();
 };
