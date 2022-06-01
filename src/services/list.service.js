@@ -1,4 +1,5 @@
 const List = require('../models/list.model');
+const Anime = require('../models/anime.model');
 const animeService = require('./anime.service');
 
 const getUserLists = userId => List.find({ owner: userId });
@@ -18,11 +19,8 @@ const getListAnimes = async ({ userId, listId, page = 1 }) => {
 
 const getAllAnimes = async ({ userId }) => {
   const lists = await getUserLists(userId);
-  let animesIds = [];
-  lists.forEach(list => list.animes.forEach(
-    anime => animesIds.push(anime.get('id'))
-  ));
-  return [...new Set(animesIds)];
+  const animes = Anime.find({ list: { $in: lists.map(l => l._id) } });
+  return animes;
 };
 
 const create = async list => List.create(list);
@@ -49,12 +47,16 @@ const addAnime = async ({ listId, animeId, animeCategories, userId }) => {
   if (list.animes.find(a => a.get('id') === animeId)) {
     throw new Error('Anime already in list');
   }
-  list.animes.push({
+  const anime = await Anime.create({
     id: animeId,
-    categories: [ ...animeCategories ],
-    episodesWatched: 0,
+    list: listId,
+    categories: animeCategories,
+    episodesWatched: [],
     minutesWatched: 0,
   });
+
+  list.animes.push(anime._id);
+
   return list.save();
 };
 
@@ -66,7 +68,8 @@ const removeAnime = async ({ listId, animeId, userId }) => {
   if (!list.owner.equals(userId)) {
     throw new Error('You cannot update this list');
   }
-  list.animes = list.animes.filter(a => a.get('id') !== animeId);
+
+  await Anime.findOneAndDelete({ id: animeId, list: listId });
 
   await list.save();
 };
@@ -82,6 +85,40 @@ const remove = async ({ listId, userId }) => {
   await list.remove();
 };
 
+const episodeSeen = async ({ listId, animeId, episodeId, userId }) => {
+  const list = await List.findById(listId);
+  if (!list) {
+    throw new Error('List not found');
+  }
+  if (!list.owner.equals(userId)) {
+    throw new Error('You cannot update this list');
+  }
+  const anime = Anime.findOne({ id: animeId, list: listId });
+  if (!anime) {
+    throw new Error('Anime not found in this list');
+  }
+
+  anime.episodesWatched.push(episodeId);
+  return anime.save;
+};
+
+const episodeUnseen = async ({ listId, animeId, episodeId, userId }) => {
+  const list = await List.findById(listId);
+  if (!list) {
+    throw new Error('List not found');
+  }
+  if (!list.owner.equals(userId)) {
+    throw new Error('You cannot update this list');
+  }
+  const anime = Anime.findOne({ id: animeId, list: listId });
+  if (!anime) {
+    throw new Error('Anime not found in this list');
+  }
+
+  anime.episodesWatched.filter(a => a !== episodeId);
+  return anime.save;
+};
+
 module.exports = {
   getUserLists,
   getListAnimes,
@@ -91,4 +128,6 @@ module.exports = {
   removeAnime,
   addAnime,
   remove,
+  episodeSeen,
+  episodeUnseen,
 };

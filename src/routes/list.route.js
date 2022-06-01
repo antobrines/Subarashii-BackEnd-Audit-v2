@@ -30,6 +30,18 @@ router.post(
 );
 
 router.patch(
+  '/:listId/anime/:animeId/see',
+  [ isConnected, validate(listValidation.episodeSeen) ],
+  listController.episodeSeen
+);
+
+router.patch(
+  '/:listId/anime/:animeId/unsee',
+  [ isConnected, validate(listValidation.episodeUnseen) ],
+  listController.episodeUnseen
+);
+
+router.patch(
   '/:listId/anime/add',
   [ isConnected, validate(listValidation.addAnime) ],
   listController.addAnime
