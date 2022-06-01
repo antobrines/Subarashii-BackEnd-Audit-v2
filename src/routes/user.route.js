@@ -17,6 +17,8 @@ router.post(
 );
 router.post('/login', validate(authValidation.login), userController.login);
 
+router.put('/', [isConnected, validate(authValidation.update)], userController.update);
+
 router.get('/me', [isConnected, isBanned], userController.me);
 router.put('/password', [isConnected, validate(authValidation.updatePassword)], userController.updatePassword);
 

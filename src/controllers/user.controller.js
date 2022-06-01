@@ -37,6 +37,16 @@ const updatePassword = catchAsync(async (req, res, next) => {
   }
 });
 
+const update = catchAsync(async (req, res, next) => {
+  const varLogged = await userService.update(req);
+  if(varLogged === 'Error when saving data'){
+    const error = new Error('Une erreur est survenue lors de la mise à jour des données');
+    errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
+  } else {
+    successF('Les informations de l\'utilisateur ont bien été enregistrées', varLogged, httpStatus.OK, res, next);
+  }
+});
+
 const generateResetPasswordKey = catchAsync(async (req, res, next) => {
   const varLogged = await userService.generateResetPasswordKey(req.body);
   if(varLogged === 'Error when send email'){
@@ -64,6 +74,7 @@ const me = catchAsync(async (req, res, next) => {
 module.exports = {
   register,
   login,
+  update,
   updatePassword,
   generateResetPasswordKey,
   resetPassword,

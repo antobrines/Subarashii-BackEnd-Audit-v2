@@ -18,11 +18,11 @@ const userValidate = async (req) => {
   const filter = {
     email: req.body.email
   };
-  const update = {
+  const updateValidate = {
     is_validate: true
   };
-  await User.findOneAndUpdate(filter, update);
-  const user = await User.findOne(filter);
+  await User.findOneAndUpdate(filter, updateValidate);
+  const user = await User.findOne(filter, {roles: 0, password: 0});
   return user;
 };
 
@@ -147,6 +147,29 @@ const resetPassword = async (requestBody) => {
   }
 };
 
+const update = async (req) => {
+  const user = req.user;
+  const filter = {
+    _id: user.userId
+  };
+
+  let userFromDB = await User.findOne(filter, {roles: 0, password: 0});
+
+  if(userFromDB){
+    const newUsername = req.body.username;
+    const newEmail = req.body.email;
+
+    userFromDB.username = newUsername ? newUsername : userFromDB.username;
+    userFromDB.email = newEmail ? newEmail : userFromDB.email;
+
+    const result = userFromDB.save();
+    if(result){
+      return userFromDB;
+    }
+  }
+  return 'Error when saving data';
+};
+
 const ban = async (userId) => {
   return User.findOneAndUpdate({
     _id: userId
@@ -174,6 +197,7 @@ module.exports = {
   userValidate,
   login,
   findOneById,
+  update,
   updatePassword,
   generateResetPasswordKey,
   resetPassword,
