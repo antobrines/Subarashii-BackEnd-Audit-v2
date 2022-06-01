@@ -13,7 +13,7 @@ const create = async (contentBody) => {
   if (badWords.isProfane(contentBody.content)) {
     throw new Error('Your comment contains bad words');
   }
-  return await Comment.create(contentBody);
+  return Comment.create(contentBody);
 };
 
 const update = async (id, userdId, reqBody) => {
@@ -24,7 +24,7 @@ const update = async (id, userdId, reqBody) => {
   if (!comment) {
     throw new Error('You are not the owner of this comment');
   }
-  return await Comment.findOneAndUpdate({
+  return Comment.findOneAndUpdate({
     _id: id
   }, reqBody, {
     new: true
@@ -50,7 +50,7 @@ const remove = async (id, userId, isAdmin = false) => {
 };
 
 const getAllCommentByAnimeId = async (animeId) => {
-  return await Comment.find({
+  return Comment.find({
     animeId: animeId
   }).sort({
     created_at: -1
@@ -58,7 +58,7 @@ const getAllCommentByAnimeId = async (animeId) => {
 };
 
 const getMyComment = async (userId) => {
-  return await Comment.find({
+  return Comment.find({
     userId: userId
   });
 };
@@ -82,7 +82,7 @@ const likeComment = async (id, userId) => {
       }
     });
   }
-  return await Comment.findOneAndUpdate({
+  return Comment.findOneAndUpdate({
     _id: id
   }, {
     $push: {
@@ -120,7 +120,7 @@ const dislikeComment = async (id, userId) => {
       }
     });
   }
-  return await Comment.findOneAndUpdate({
+  return Comment.findOneAndUpdate({
     _id: id
   }, {
     $push: {

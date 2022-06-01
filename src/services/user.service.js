@@ -64,13 +64,13 @@ const login = async (req) => {
 };
 
 const findOneById = async (req) => {
-  return await User.findOne({
+  return User.findOne({
     _id: req.user.userId
   });
 };
 
 const ban = async (userId) => {
-  return await User.findOneAndUpdate({
+  return User.findOneAndUpdate({
     _id: userId
   }, {
     banned: true
@@ -80,7 +80,7 @@ const ban = async (userId) => {
 };
 
 const unban = async (userId) => {
-  return await User.findOneAndUpdate({
+  return User.findOneAndUpdate({
     _id: userId
   }, {
     banned: false
