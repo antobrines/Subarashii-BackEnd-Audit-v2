@@ -27,6 +27,13 @@ const updatePassword = {
   })
 };
 
+const update = {
+  body: Joi.object().keys({
+    username: Joi.string(),
+    email: Joi.string().email().trim().min(6)
+  })
+};
+
 const resetPassword = {
   body: Joi.object().keys({
     key: Joi.string().required(),
@@ -45,6 +52,7 @@ const generateResetPasswordKey = {
 module.exports = {
   register,
   login,
+  update,
   updatePassword,
   generateResetPasswordKey,
   resetPassword
