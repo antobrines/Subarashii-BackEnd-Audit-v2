@@ -10,7 +10,7 @@ const tmdbRequest = async url => {
 };
 
 const getMultipleAnimes = async ({ 
-  adults= false, 
+  adults = false, 
   page = 1, 
   categories = '16', 
   status = undefined, 
