@@ -5,6 +5,20 @@ const {
   successF
 } = require('../utils/message');
 
+const getUserLists = catchAsync(async (req, res, next) => {
+  const { userId } = req.user;
+  const lists = await listService.getUserLists(userId);
+  successF('User lists recovered', lists, httpStatus.OK, res, next);
+});
+
+const getListAnimes = catchAsync(async (req, res, next) => {
+  const { userId } = req.user;
+  const { listId } = req.params;
+  const { page } = req.query;
+  const animes = await listService.getListAnimes({ userId, listId, page });
+  successF('List animes recovered', animes, httpStatus.OK, res, next);
+});
+
 const createList = catchAsync(async (req, res, next) => {
   const list = await listService.create({ 
     owner: req.user.userId,
@@ -29,6 +43,8 @@ const deleteList = catchAsync(async (req, res, next) => {
 });
 
 module.exports = {
+  getUserLists,
+  getListAnimes,
   createList,
   updateList,
   deleteList,

@@ -1,5 +1,11 @@
 const Joi = require('Joi');
 
+const getListAnimes = {
+  query: Joi.object().keys({
+    page: Joi.number().integer().min(1),
+  }),
+};
+
 const create = {
   body: Joi.object().keys({
     label: Joi.string().required(),
@@ -15,6 +21,7 @@ const update = {
 };
 
 module.exports = {
+  getListAnimes,
   create,
   update
 };

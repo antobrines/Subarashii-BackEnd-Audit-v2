@@ -5,6 +5,18 @@ const validate = require('../middlewares/validate');
 const { isConnected } = require('../middlewares/user.middleware');
 const router = express.Router();
 
+router.get(
+  '/',
+  [ isConnected ],
+  listController.getUserLists
+);
+
+router.get(
+  '/:listId/animes',
+  [ isConnected, validate(listValidation.getListAnimes) ],
+  listController.getListAnimes
+);
+
 router.post(
   '/',
   [ isConnected, validate(listValidation.create) ],
