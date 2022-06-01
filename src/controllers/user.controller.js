@@ -19,6 +19,10 @@ const login = catchAsync(async (req, res, next) => {
     const error = new Error('L\'adresse mail ou le mot de passe est invalide');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
+    if (varLogged === 'User is banned') {
+      const error = new Error('Vous êtes banni');
+      return errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
+    }
     successF('La connexion à bien été effectué', varLogged, httpStatus.OK, res, next);
   }
 });
@@ -28,7 +32,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
   if (varLogged === 'Password do not match') {
     const error = new Error('Le mot de passe renseigné ne correspond pas au précédent');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
-  }else if(varLogged === 'Error when saving password'){
+  } else if (varLogged === 'Error when saving password') {
     const error = new Error('Une erreur est survenue lors de la mise à jour');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
@@ -39,7 +43,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
 
 const update = catchAsync(async (req, res, next) => {
   const varLogged = await userService.update(req);
-  if(varLogged === 'Error when saving data'){
+  if (varLogged === 'Error when saving data') {
     const error = new Error('Une erreur est survenue lors de la mise à jour des données');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
@@ -49,7 +53,7 @@ const update = catchAsync(async (req, res, next) => {
 
 const generateResetPasswordKey = catchAsync(async (req, res, next) => {
   const varLogged = await userService.generateResetPasswordKey(req.body);
-  if(varLogged === 'Error when send email'){
+  if (varLogged === 'Error when send email') {
     const error = new Error('Une erreur est survenue lors de l\'envoie de l\'email');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   }
@@ -58,7 +62,7 @@ const generateResetPasswordKey = catchAsync(async (req, res, next) => {
 
 const resetPassword = catchAsync(async (req, res, next) => {
   const varLogged = await userService.resetPassword(req.body);
-  if(['Reset password key is invalid', 'Invalid credential', 'Error when saving new password'].includes(varLogged)){
+  if (['Reset password key is invalid', 'Invalid credential', 'Error when saving new password'].includes(varLogged)) {
     const error = new Error('La clé n\'existe pas ou les informations saisies sont incorrect');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   }
