@@ -105,7 +105,7 @@ const generateResetPasswordKey = async (requestBody) => {
   if(user) {
     const key = randomString(64);
     memoryCache.setSpecificCacheValue(['resetPasswordCache', user.email], key);
-    let successSendMail = await sendMail(
+    const successSendMail = await sendMail(
       user.email,
       '[Subarashii] Reset password',
       '<p>Reset password key : ' + key + ' </p>');
