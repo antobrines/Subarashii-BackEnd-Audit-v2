@@ -13,7 +13,7 @@ const getListAnimes = async ({ userId, listId, page = 1 }) => {
   }
   const animesPerPage = 6;
   const animesIds = list.animes.slice((page - 1) * animesPerPage, page * animesPerPage);
-  return await Promise.all(animesIds.map(id => animeService.getAnimeById(id) ));
+  return Promise.all(animesIds.map(id => animeService.getAnimeById(id) ));
 };
 
 const create = async list => List.create(list);
