@@ -41,7 +41,6 @@ const update = catchAsync(async (req, res, next) => {
     const error = new Error('Une erreur est survenue lors de la mise à jour des données');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
-    console.log(res.status);
     successF('Les informations de l\'utilisateur ont bien été enregistrées', varLogged, httpStatus.OK, res, next);
   }
 });
