@@ -27,12 +27,20 @@ const createList = catchAsync(async (req, res, next) => {
   successF('List created', list, httpStatus.OK, res, next);
 });
 
-const updateList = catchAsync(async (req, res, next) => {
+const addAnime = catchAsync(async (req, res, next) => {
   const { listId } = req.params;
   const { userId } = req.user;
-  const { animeId, animeCategories, action } = req.body;
-  const list = await listService.update({ listId, animeId, animeCategories, userId, action });
+  const { animeId, animeCategories } = req.body;
+  const list = await listService.addAnime({ listId, animeId, animeCategories, userId });
   successF('List updated', list, httpStatus.OK, res, next);
+});
+
+const removeAnime = catchAsync(async (req, res, next) => {
+  const { listId } = req.params;
+  const { userId } = req.user;
+  const { animeId } = req.body;
+  await listService.removeAnime({ listId, animeId, userId });
+  successF('List updated', {}, httpStatus.OK, res, next);
 });
 
 const deleteList = catchAsync(async (req, res, next) => {
@@ -46,6 +54,7 @@ module.exports = {
   getUserLists,
   getListAnimes,
   createList,
-  updateList,
+  addAnime,
+  removeAnime,
   deleteList,
 };

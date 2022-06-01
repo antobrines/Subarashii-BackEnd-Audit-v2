@@ -24,9 +24,15 @@ router.post(
 );
 
 router.patch(
-  '/:listId',
-  [ isConnected, validate(listValidation.update) ],
-  listController.updateList
+  '/:listId/anime/add',
+  [ isConnected, validate(listValidation.addAnime) ],
+  listController.addAnime
+);
+
+router.patch(
+  '/:listId/anime/remove',
+  [ isConnected, validate(listValidation.removeAnime) ],
+  listController.removeAnime
 );
 
 router.delete(
