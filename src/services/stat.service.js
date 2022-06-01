@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const commentService = require('../services/comment.service');
+const listService = require('../services/list.service');
 const getStat = async (userId) => {
   const commentsStat = await getCommentStat(userId);
   const animesStat = await getAnimeStat(userId);
@@ -30,20 +31,38 @@ const getAnimeStat = async (userId) => {
 };
 
 const getListStat = async (userId) => {
-  return [{
-    name: 'A voir',
-    nbAnime: 10
-  }];
+  const lists = await listService.getUserLists(userId);
+  const listsStat = [];
+  lists.forEach(list => {
+    const nbAnimes = list.animes.length;
+    const listStat = {
+      name: list.label,
+      nbAnime: nbAnimes
+    };
+    listsStat.push(listStat);
+  });
+  return listsStat;
 };
 
 const getGenresStat = async (userId) => {
-  return [{
-    name: 'Action',
-    nbTime: 10
-  }, {
-    name: 'Adventure',
-    nbTime: 5
-  }];
+  const lists = await listService.getUserLists(userId);
+  const genres = [];
+  lists.forEach(list => list.animes.forEach(anime => {
+    currentGenres = anime.get('categories');
+    currentGenres.forEach(genre => {
+      genres.push(genre);
+    });
+  }));
+  const setGenres = [...new Set(genres)];
+  const genresStat = [];
+  setGenres.forEach(genre => {
+    const nbTime = genres.filter(g => g === genre).length;
+    genresStat.push({
+      name: genre,
+      nbTime: nbTime
+    });
+  });
+  return genresStat;
 };
 
 module.exports = {
