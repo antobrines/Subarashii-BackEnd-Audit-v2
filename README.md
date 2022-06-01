@@ -696,6 +696,35 @@ Must be an admin
         }
     })
   ```
+  
+### Anime id's of all list
+* **URL**
+
+  /lists/animes
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+  None
+
+* **Body Params**
+
+  None
+
+* **Sample Call:**
+
+  ```javascript
+    fetch('https://subarashii-backend.vercel.app/api/lists/animes', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer token'
+        }
+    })
+  ```
 
 ### Create
 * **URL**
