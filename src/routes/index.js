@@ -3,6 +3,7 @@ const express = require('express');
 const userRoute = require('./user.route');
 const commentRoute = require('./comment.route');
 const animeRoute = require('./anime.route');
+const listRoutes = require('./list.route');
 const statRoute = require('./stat.route');
 const router = express.Router();
 
@@ -15,6 +16,9 @@ const defaultRoutes = [{
 }, {
   path: '/animes',
   route: animeRoute,
+} , {
+  path: '/lists',
+  route: listRoutes,
 }, {
   path: '/stats',
   route: statRoute,
