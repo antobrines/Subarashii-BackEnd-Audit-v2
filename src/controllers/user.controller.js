@@ -37,6 +37,10 @@ const updatePassword = catchAsync(async (req, res, next) => {
 
 const generateResetPasswordKey = catchAsync(async (req, res, next) => {
   const varLogged = await userService.generateResetPasswordKey(req.body);
+  if(varLogged === 'Error when send email'){
+    const error = new Error('Une erreur est survenue lors de l\'envoie de l\'email');
+    errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
+  }
   successF('Si l\'email saisi existe, il recevra un email avec un lien pour reset son mot de passe !', varLogged, httpStatus.OK, res, next);
 });
 
