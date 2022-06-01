@@ -4,6 +4,7 @@ const userRoute = require('./user.route');
 const commentRoute = require('./comment.route');
 const animeRoute = require('./anime.route');
 const listRoutes = require('./list.route');
+const statRoute = require('./stat.route');
 const router = express.Router();
 
 const defaultRoutes = [{
@@ -18,6 +19,9 @@ const defaultRoutes = [{
 } , {
   path: '/lists',
   route: listRoutes,
+}, {
+  path: '/stats',
+  route: statRoute,
 }];
 
 defaultRoutes.forEach((route) => {
