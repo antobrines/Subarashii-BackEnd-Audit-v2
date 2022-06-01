@@ -13,5 +13,11 @@ module.exports = {
     secret: process.env.TOKEN_SECRET,
     expire: process.env.TOKEN_EXPIRE
   },
-  apiToken: process.env.API_TOKEN
+  apiToken: process.env.API_TOKEN,
+  email: {
+    smtp: process.env.EMAIL_SMTP,
+    port: process.env.EMAIL_PORT,
+    username: process.env.EMAIL_USERNAME,
+    password: process.env.EMAIL_PASSWORD
+  }
 };
