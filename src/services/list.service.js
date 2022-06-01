@@ -16,6 +16,15 @@ const getListAnimes = async ({ userId, listId, page = 1 }) => {
   return Promise.all(animesIds.map(id => animeService.getAnimeById(id) ));
 };
 
+const getAllAnimes = async ({ userId }) => {
+  const lists = await getUserLists(userId);
+  let animesIds = [];
+  lists.forEach(list => list.animes.forEach(
+    anime => animesIds.push(anime.get('id'))
+  ));
+  return [...new Set(animesIds)];
+};
+
 const create = async list => List.create(list);
 
 const createDefault = async userId => {
@@ -76,6 +85,7 @@ const remove = async ({ listId, userId }) => {
 module.exports = {
   getUserLists,
   getListAnimes,
+  getAllAnimes,
   create,
   createDefault,
   removeAnime,
