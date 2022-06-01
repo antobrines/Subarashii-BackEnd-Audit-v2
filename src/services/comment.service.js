@@ -13,7 +13,7 @@ const create = async (contentBody) => {
   if (badWords.isProfane(contentBody.content)) {
     throw new Error('Your comment contains bad words');
   }
-  return await Comment.create(contentBody);
+  return Comment.create(contentBody);
 };
 
 const update = async (id, userdId, reqBody) => {
@@ -24,7 +24,7 @@ const update = async (id, userdId, reqBody) => {
   if (!comment) {
     throw new Error('You are not the owner of this comment');
   }
-  return await Comment.findOneAndUpdate({
+  return Comment.findOneAndUpdate({
     _id: id
   }, reqBody, {
     new: true
@@ -50,17 +50,94 @@ const remove = async (id, userId, isAdmin = false) => {
 };
 
 const getAllCommentByAnimeId = async (animeId) => {
-  return await Comment.find({
+  return Comment.find({
     animeId: animeId
   }).sort({
     created_at: -1
   });
 };
 
+const getMyComment = async (userId) => {
+  return Comment.find({
+    userId: userId
+  });
+};
+
+const likeComment = async (id, userId) => {
+  const comment = await Comment.findOne({
+    _id: id
+  });
+  if (!comment) {
+    throw new Error('Comment not found');
+  }
+  if (comment.likedUsers.includes(userId)) {
+    throw new Error('You already liked this comment');
+  }
+  if (comment.dislikedUsers.includes(userId)) {
+    await Comment.findOneAndUpdate({
+      _id: id
+    }, {
+      $pull: {
+        dislikedUsers: userId
+      }
+    });
+  }
+  return Comment.findOneAndUpdate({
+    _id: id
+  }, {
+    $push: {
+      likedUsers: userId
+    }
+  }, {
+    new: true
+  });
+};
+
+const getNumberOfCommentsLiked = async (userId) => {
+  const comments = await Comment.find({
+    likedUsers: userId
+  });
+  return comments.length;
+};
+
+
+const dislikeComment = async (id, userId) => {
+  const comment = await Comment.findOne({
+    _id: id
+  });
+  if (!comment) {
+    throw new Error('Comment not found');
+  }
+  if (comment.dislikedUsers.includes(userId)) {
+    throw new Error('You already disliked this comment');
+  }
+  if (comment.likedUsers.includes(userId)) {
+    await Comment.findOneAndUpdate({
+      _id: id
+    }, {
+      $pull: {
+        likedUsers: userId
+      }
+    });
+  }
+  return Comment.findOneAndUpdate({
+    _id: id
+  }, {
+    $push: {
+      dislikedUsers: userId
+    }
+  }, {
+    new: true
+  });
+};
 
 module.exports = {
   create,
   update,
   remove,
-  getAllCommentByAnimeId
+  getAllCommentByAnimeId,
+  getMyComment,
+  likeComment,
+  dislikeComment,
+  getNumberOfCommentsLiked
 };

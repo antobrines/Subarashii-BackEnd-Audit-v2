@@ -38,10 +38,30 @@ const getAllCommentByAnimeId = catchAsync(async (req, res, next) => {
   successF('Comments', comments, httpStatus.OK, res, next);
 });
 
+const likeComment = catchAsync(async (req, res, next) => {
+  const {
+    id
+  } = req.params;
+  const user = req.user;
+  const comment = await commentService.likeComment(id, user.userId);
+  successF('Comment Liked', comment, httpStatus.OK, res, next);
+});
+
+const dislikeComment = catchAsync(async (req, res, next) => {
+  const {
+    id
+  } = req.params;
+  const user = req.user;
+  const comment = await commentService.dislikeComment(id, user.userId);
+  successF('Comment Disliked', comment, httpStatus.OK, res, next);
+});
+
 
 module.exports = {
   create,
   update,
   remove,
-  getAllCommentByAnimeId
+  getAllCommentByAnimeId,
+  likeComment,
+  dislikeComment
 };
