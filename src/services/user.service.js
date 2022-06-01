@@ -18,10 +18,10 @@ const userValidate = async (req) => {
   const filter = {
     email: req.body.email
   };
-  const update = {
+  const updateValidate = {
     is_validate: true
   };
-  await User.findOneAndUpdate(filter, update);
+  await User.findOneAndUpdate(filter, updateValidate);
   const user = await User.findOne(filter, {roles: 0, password: 0});
   return user;
 };
