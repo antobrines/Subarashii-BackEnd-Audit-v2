@@ -17,6 +17,12 @@ router.get(
   listController.getListAnimes
 );
 
+router.get(
+  '/animes',
+  [ isConnected ],
+  listController.getAllAnimes
+);
+
 router.post(
   '/',
   [ isConnected, validate(listValidation.create) ],

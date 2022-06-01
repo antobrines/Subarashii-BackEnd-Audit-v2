@@ -19,6 +19,12 @@ const getListAnimes = catchAsync(async (req, res, next) => {
   successF('List animes recovered', animes, httpStatus.OK, res, next);
 });
 
+const getAllAnimes = catchAsync(async (req, res, next) => {
+  const { userId } = req.user;
+  const animes = await listService.getAllAnimes({ userId });
+  successF('All animes recovered', animes, httpStatus.OK, res, next);
+});
+
 const createList = catchAsync(async (req, res, next) => {
   const list = await listService.create({ 
     owner: req.user.userId,
@@ -53,6 +59,7 @@ const deleteList = catchAsync(async (req, res, next) => {
 module.exports = {
   getUserLists,
   getListAnimes,
+  getAllAnimes,
   createList,
   addAnime,
   removeAnime,
