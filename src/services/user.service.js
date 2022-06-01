@@ -5,8 +5,12 @@ const bcrypt = require('bcryptjs');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const memoryCache = require('../cache/memoryCache');
-const {randomString} = require('../utils/random');
-const {sendMail} = require('../utils/mailer');
+const {
+  randomString
+} = require('../utils/random');
+const {
+  sendMail
+} = require('../utils/mailer');
 
 const create = async (userBody) => {
   if (userBody.password)
@@ -22,7 +26,10 @@ const userValidate = async (req) => {
     is_validate: true
   };
   await User.findOneAndUpdate(filter, updateValidate);
-  const user = await User.findOne(filter, {roles: 0, password: 0});
+  const user = await User.findOne(filter, {
+    roles: 0,
+    password: 0
+  });
   return user;
 };
 
@@ -77,14 +84,14 @@ const updatePassword = async (req) => {
 
   const hasSamePassword = await compareAsync(req.body.previousPassword, userFromDB.password);
 
-  if(hasSamePassword === false){
+  if (hasSamePassword === false) {
     return 'Password do not match';
   }
 
   userFromDB.password = bcrypt.hashSync(req.body.password, 10);
 
   const success = await userFromDB.save();
-  if(!success){
+  if (!success) {
     return 'Error when saving password';
   }
 };
@@ -102,15 +109,15 @@ const generateResetPasswordKey = async (requestBody) => {
 
   let user = await User.findOne(filter);
 
-  if(user) {
+  if (user) {
     const key = randomString(64);
     memoryCache.setSpecificCacheValue(['resetPasswordCache', user.email], key);
     const successSendMail = await sendMail(
       user.email,
       '[Subarashii] Reset password',
-      '<p>Reset password key : ' + key + ' </p>');
+      '<p>Reset password key : http://localhost:4200/users/callback?key=' + key + ' </p>');
 
-    if(!successSendMail){
+    if (!successSendMail) {
       return 'Error when send email';
     }
   }
@@ -119,7 +126,10 @@ const generateResetPasswordKey = async (requestBody) => {
 const me = async (req) => {
   return User.findOne({
     _id: req.user.userId
-  }, {roles: 0, password: 0});
+  }, {
+    roles: 0,
+    password: 0
+  });
 };
 
 const resetPassword = async (requestBody) => {
@@ -131,18 +141,18 @@ const resetPassword = async (requestBody) => {
 
   const resetPasswordKey = memoryCache.getSpecificCacheValue(['resetPasswordCache', user.email]);
 
-  if(resetPasswordKey && user && resetPasswordKey === requestBody.key) {
+  if (resetPasswordKey && user && resetPasswordKey === requestBody.key) {
     user.password = bcrypt.hashSync(requestBody.password, 10);
     const success = await user.save();
-    if(success){
+    if (success) {
       memoryCache.deleteSpecificCacheValue(['resetPasswordCache', user.email]);
       return 'Password of user has been reset';
-    }else{
+    } else {
       return 'Error when saving new password';
     }
-  }else if(!resetPasswordKey){
+  } else if (!resetPasswordKey) {
     return 'Reset password key is invalid';
-  }else{
+  } else {
     return 'Invalid credential';
   }
 };
@@ -153,9 +163,12 @@ const update = async (req) => {
     _id: user.userId
   };
 
-  let userFromDB = await User.findOne(filter, {roles: 0, password: 0});
+  let userFromDB = await User.findOne(filter, {
+    roles: 0,
+    password: 0
+  });
 
-  if(userFromDB){
+  if (userFromDB) {
     const newUsername = req.body.username;
     const newEmail = req.body.email;
 
@@ -163,7 +176,7 @@ const update = async (req) => {
     userFromDB.email = newEmail ? newEmail : userFromDB.email;
 
     const result = userFromDB.save();
-    if(result){
+    if (result) {
       return userFromDB;
     }
   }
