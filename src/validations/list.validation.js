@@ -13,15 +13,22 @@ const create = {
   })
 };
 
-const update = {
+const addAnime = {
   body: Joi.object().keys({
     animeId: Joi.string().required(),
-    action: Joi.string().valid('add', 'remove').required(),
+    animeCategories: Joi.array().items(Joi.string()).required(),
+  }),
+};
+
+const removeAnime = {
+  body: Joi.object().keys({
+    animeId: Joi.string().required(),
   }),
 };
 
 module.exports = {
   getListAnimes,
   create,
-  update
+  addAnime,
+  removeAnime,
 };

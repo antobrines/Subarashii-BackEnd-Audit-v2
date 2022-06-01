@@ -9,8 +9,14 @@ const tmdbRequest = async url => {
   return await request.json();
 };
 
-const getMultipleAnimes = async ({ adults= false, page = 1, categories = '16', status = undefined }) => 
-  await tmdbRequest(`/discover/tv?with_genres=${categories}&include_adult=${adults}&with_status=${status}&original_language=ja&page=${page}&language=fr-Fr&sort_by=original_title.asc&original_language=ja`);
+const getMultipleAnimes = async ({ 
+  adults = false, 
+  page = 1, 
+  categories = '16', 
+  status = undefined, 
+  sort_by = 'original_title.asc' 
+}) => 
+  await tmdbRequest(`/discover/tv?with_genres=${categories}&include_adult=${adults}${status && `&with_status=${status}`}&original_language=ja&page=${page}&language=fr-Fr&sort_by=${sort_by}&original_language=ja`);
 
 const getAnimeById = async id => await tmdbRequest(`/tv/${id}`);
 
