@@ -59,6 +59,9 @@ const login = async (req) => {
     return 'Invalid Credentiel';
   }
 
+  if (user.banned) {
+    return 'User is banned';
+  }
   const accessToken = await jwt.sign({
     email: user.email,
     username: user.username,
