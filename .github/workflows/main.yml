@@ -57,9 +57,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Installing deps
-        run: yarn install
+        run: npm install
       - name: linting
-        run: yarn lint
+        run: npm run lint
         
 
 
