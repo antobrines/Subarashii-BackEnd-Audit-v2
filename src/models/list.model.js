@@ -13,10 +13,6 @@ const listSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  animes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Anime',
-  }]
 });
 
 const List = mongoose.model('List', listSchema);

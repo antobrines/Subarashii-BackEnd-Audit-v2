@@ -13,8 +13,9 @@ const getListAnimes = async ({ userId, listId, page = 1 }) => {
     throw new Error('You cannot update this list');
   }
   const animesPerPage = 6;
-  const animesIds = list.animes.slice((page - 1) * animesPerPage, page * animesPerPage);
-  return Promise.all(animesIds.map(id => animeService.getAnimeById(id) ));
+  const animes = await Anime.find({ list: listId });
+  const animesPage = animes.slice((page - 1) * animesPerPage, page * animesPerPage);
+  return Promise.all(animesPage.map(anime => animeService.getAnimeById(anime.id) ));
 };
 
 const getAllAnimes = async ({ userId }) => {
@@ -44,7 +45,8 @@ const addAnime = async ({ listId, animeId, animeCategories, userId }) => {
   if (!list.owner.equals(userId)) {
     throw new Error('You cannot update this list');
   }
-  if (list.animes.find(a => a.get('id') === animeId)) {
+  const animeExists = await Anime.findOne({ id: animeId, list: listId });
+  if (animeExists) {
     throw new Error('Anime already in list');
   }
   const anime = await Anime.create({
@@ -55,9 +57,7 @@ const addAnime = async ({ listId, animeId, animeCategories, userId }) => {
     minutesWatched: 0,
   });
 
-  list.animes.push(anime._id);
-
-  return list.save();
+  return anime;
 };
 
 const removeAnime = async ({ listId, animeId, userId }) => {
@@ -82,6 +82,7 @@ const remove = async ({ listId, userId }) => {
   if (!list.owner.equals(userId) || !list.deletable) {
     throw new Error('You cannot delete this list');
   }
+  await Anime.deleteMany({ list: listId });
   await list.remove();
 };
 

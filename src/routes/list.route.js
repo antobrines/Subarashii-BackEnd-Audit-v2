@@ -41,13 +41,13 @@ router.patch(
   listController.episodeUnseen
 );
 
-router.patch(
+router.post(
   '/:listId/anime/add',
   [ isConnected, validate(listValidation.addAnime) ],
   listController.addAnime
 );
 
-router.patch(
+router.delete(
   '/:listId/anime/remove',
   [ isConnected, validate(listValidation.removeAnime) ],
   listController.removeAnime
