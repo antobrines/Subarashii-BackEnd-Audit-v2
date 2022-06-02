@@ -94,13 +94,15 @@ const episodeSeen = async ({ listId, animeId, episodeId, userId }) => {
   if (!list.owner.equals(userId)) {
     throw new Error('You cannot update this list');
   }
-  const anime = Anime.findOne({ id: animeId, list: listId });
+  const anime = await Anime.findOne({ id: animeId, list: listId });
   if (!anime) {
     throw new Error('Anime not found in this list');
   }
-
+  if (anime.episodesWatched.includes(episodeId)) {
+    throw new Error('Episode already seen');
+  }
   anime.episodesWatched.push(episodeId);
-  return anime.save;
+  return anime.save();
 };
 
 const episodeUnseen = async ({ listId, animeId, episodeId, userId }) => {
@@ -111,13 +113,16 @@ const episodeUnseen = async ({ listId, animeId, episodeId, userId }) => {
   if (!list.owner.equals(userId)) {
     throw new Error('You cannot update this list');
   }
-  const anime = Anime.findOne({ id: animeId, list: listId });
+  const anime = await Anime.findOne({ id: animeId, list: listId });
   if (!anime) {
     throw new Error('Anime not found in this list');
   }
+  if (!anime.episodesWatched.includes(episodeId)) {
+    throw new Error('Episode not seen');
+  }
 
-  anime.episodesWatched.filter(a => a !== episodeId);
-  return anime.save;
+  anime.episodesWatched = anime.episodesWatched.filter(a => a !== episodeId);
+  return anime.save();
 };
 
 module.exports = {

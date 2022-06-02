@@ -60,15 +60,15 @@ const episodeSeen = catchAsync(async (req, res, next) => {
   const { userId } = req.user;
   const { listId, animeId } = req.params;
   const { episodeId } = req.body;
-  const list = await listService.episodeSeen({ listId, animeId, episodeId, userId });
-  successF('Episode seen', list, httpStatus.OK, res, next);
+  const episode = await listService.episodeSeen({ listId, animeId, episodeId, userId });
+  successF('Episode seen', episode, httpStatus.OK, res, next);
 });
 
 const episodeUnseen = catchAsync(async (req, res, next) => {
   const { userId } = req.user;
   const { listId, animeId } = req.params;
   const { episodeId } = req.body;
-  const list = await listService.episodeSeen({ listId, animeId, episodeId, userId });
+  const list = await listService.episodeUnseen({ listId, animeId, episodeId, userId });
   successF('Episode unseen', list, httpStatus.OK, res, next);
 });
 
