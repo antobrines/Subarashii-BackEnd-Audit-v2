@@ -48,8 +48,8 @@ router.post(
 );
 
 router.delete(
-  '/:listId/anime/remove',
-  [ isConnected, validate(listValidation.removeAnime) ],
+  '/:listId/anime/:animeId',
+  [ isConnected ],
   listController.removeAnime
 );
 

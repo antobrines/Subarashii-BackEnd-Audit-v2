@@ -68,10 +68,12 @@ const removeAnime = async ({ listId, animeId, userId }) => {
   if (!list.owner.equals(userId)) {
     throw new Error('You cannot update this list');
   }
+  const anime = await Anime.findOne({ id: animeId, list: listId });
+  if (!anime) {
+    throw new Error('Anime not found in this list');
+  }
 
-  await Anime.findOneAndDelete({ id: animeId, list: listId });
-
-  await list.save();
+  await anime.remove();
 };
 
 const remove = async ({ listId, userId }) => {

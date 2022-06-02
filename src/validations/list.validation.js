@@ -20,15 +20,8 @@ const addAnime = {
   }),
 };
 
-const removeAnime = {
-  body: Joi.object().keys({
-    animeId: Joi.string().required(),
-  }),
-};
-
 module.exports = {
   getListAnimes,
   create,
-  addAnime,
-  removeAnime,
+  addAnime
 };

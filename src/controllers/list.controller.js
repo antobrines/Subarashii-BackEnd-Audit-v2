@@ -42,9 +42,8 @@ const addAnime = catchAsync(async (req, res, next) => {
 });
 
 const removeAnime = catchAsync(async (req, res, next) => {
-  const { listId } = req.params;
+  const { listId, animeId } = req.params;
   const { userId } = req.user;
-  const { animeId } = req.body;
   await listService.removeAnime({ listId, animeId, userId });
   successF('List updated', {}, httpStatus.OK, res, next);
 });
