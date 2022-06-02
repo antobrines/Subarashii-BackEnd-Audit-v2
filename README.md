@@ -679,7 +679,7 @@ Must be an admin
   
 *  **URL Params**
 
-   `id=[number]`
+   `id=[string]`
 
 * **Body Params**
 
@@ -688,7 +688,7 @@ Must be an admin
 * **Sample Call:**
 
   ```javascript
-    fetch('https://subarashii-backend.vercel.app/api/lists/1/animes', {
+    fetch('https://subarashii-backend.vercel.app/api/lists/62957d16467fe5acaz591f65/animes', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -697,7 +697,7 @@ Must be an admin
     })
   ```
   
-### Anime id's of all list
+### Animes of all list
 * **URL**
 
   /lists/animes
@@ -776,7 +776,7 @@ Must be an admin
   
 *  **URL Params**
 
-    `id[number]`
+    `id[string]`
 
 * **Body Params**
 
@@ -785,7 +785,7 @@ Must be an admin
 * **Sample Call:**
 
   ```javascript
-    fetch('https://subarashii-backend.vercel.app/api/lists/1', {
+    fetch('https://subarashii-backend.vercel.app/api/lists/62957d16467fe5acaz591f65', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -818,7 +818,7 @@ Must be an admin
 * **Sample Call:**
 
   ```javascript
-    fetch('https://subarashii-backend.vercel.app/api/lists/1/anime/add', {
+    fetch('https://subarashii-backend.vercel.app/api/lists/62957d16467fe5acaz591f65/anime/add', {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -831,10 +831,40 @@ Must be an admin
     })
   ```
 
-### Remove anime to list
+### Remove anime from list
 * **URL**
 
-  /lists/:id/anime/remove
+  /lists/:listId/anime/:animeId
+
+* **Method:**
+
+  `DELETE`
+  
+*  **URL Params**
+
+    `id[string]`
+    `animeId[number]`
+
+* **Body Params**
+
+  None
+
+* **Sample Call:**
+
+  ```javascript
+    fetch('https://subarashii-backend.vercel.app/api/lists/1/anime/remove', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer token'
+        }
+    })
+  ```
+
+### Mark episode as seen
+* **URL**
+
+  /lists/:listId/anime/:animeId/see
 
 * **Method:**
 
@@ -843,15 +873,46 @@ Must be an admin
 *  **URL Params**
 
     `id[string]`
+    `animeId[number]`
 
 * **Body Params**
 
-   None
+    `episodeId[number]`
 
 * **Sample Call:**
 
   ```javascript
-    fetch('https://subarashii-backend.vercel.app/api/lists/1/anime/remove', {
+    fetch('https://subarashii-backend.vercel.app/api/lists/62957d16467fe5acaz591f65/anime/1/see', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer token'
+        }
+    })
+  ```
+
+### Remove episode from seen ones
+* **URL**
+
+  /lists/:listId/anime/:animeId/unsee
+
+* **Method:**
+
+  `PATCH`
+  
+*  **URL Params**
+
+    `id[string]`
+    `animeId[number]`
+
+* **Body Params**
+
+    `episodeId[number]`
+
+* **Sample Call:**
+
+  ```javascript
+    fetch('https://subarashii-backend.vercel.app/api/lists/62957d16467fe5acaz591f65/anime/1/unsee', {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
