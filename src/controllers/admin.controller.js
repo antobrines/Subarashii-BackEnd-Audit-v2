@@ -32,8 +32,19 @@ const removeComment = catchAsync(async (req, res, next) => {
   successF('Comment Deleted', comment, httpStatus.OK, res, next);
 });
 
+const getAllUsers = catchAsync(async (req, res, next) => {
+  const search = req.query.search;
+  const paramsQuery = {
+    limit: req.query.limit,
+    page: req.query.page,
+  };
+  const users = await userService.getAllUsers(paramsQuery, search);
+  successF('users', users, httpStatus.OK, res, next);
+});
+
 module.exports = {
   ban,
   unban,
-  removeComment
+  removeComment,
+  getAllUsers
 };
