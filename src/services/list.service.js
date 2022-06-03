@@ -103,6 +103,17 @@ const episodeSeen = async ({ listId, animeId, episodeId, userId }) => {
   if (anime.episodesWatched.includes(episodeId)) {
     throw new Error('Episode already seen');
   }
+  if (anime.episodesWatched.length === 0) {
+    const toSeeList = await List.findOne({ label: 'En cours', owner: userId });
+    anime.list = toSeeList._id;
+  } else {
+    const animeDetails = await animeService.getAnimeById(animeId);
+    if (anime.episodesWatched === animeDetails.number_of_episodes) {
+      const toSeeList = await List.findOne({ label: 'Terminée', owner: userId });
+      anime.list = toSeeList._id;
+    }
+  }
+  
   anime.episodesWatched.push(episodeId);
   return anime.save();
 };
@@ -124,6 +135,7 @@ const episodeUnseen = async ({ listId, animeId, episodeId, userId }) => {
   }
 
   anime.episodesWatched = anime.episodesWatched.filter(a => a !== episodeId);
+  
   return anime.save();
 };
 
