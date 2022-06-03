@@ -42,9 +42,8 @@ const addAnime = catchAsync(async (req, res, next) => {
 });
 
 const removeAnime = catchAsync(async (req, res, next) => {
-  const { listId } = req.params;
+  const { listId, animeId } = req.params;
   const { userId } = req.user;
-  const { animeId } = req.body;
   await listService.removeAnime({ listId, animeId, userId });
   successF('List updated', {}, httpStatus.OK, res, next);
 });
@@ -56,6 +55,22 @@ const deleteList = catchAsync(async (req, res, next) => {
   successF('List deleted', {}, httpStatus.OK, res, next);
 });
 
+const episodeSeen = catchAsync(async (req, res, next) => {
+  const { userId } = req.user;
+  const { listId, animeId } = req.params;
+  const { episodeId } = req.body;
+  const episode = await listService.episodeSeen({ listId, animeId, episodeId, userId });
+  successF('Episode seen', episode, httpStatus.OK, res, next);
+});
+
+const episodeUnseen = catchAsync(async (req, res, next) => {
+  const { userId } = req.user;
+  const { listId, animeId } = req.params;
+  const { episodeId } = req.body;
+  const list = await listService.episodeUnseen({ listId, animeId, episodeId, userId });
+  successF('Episode unseen', list, httpStatus.OK, res, next);
+});
+
 module.exports = {
   getUserLists,
   getListAnimes,
@@ -64,4 +79,6 @@ module.exports = {
   addAnime,
   removeAnime,
   deleteList,
+  episodeSeen,
+  episodeUnseen,
 };

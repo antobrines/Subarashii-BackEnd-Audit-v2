@@ -13,23 +13,6 @@ const listSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  // id / list of genres / episodes watched / minutes watched
-  animes: [{
-    type: Map,
-    of: new mongoose.Schema({
-      id: String,
-      categories: [String],
-      episodesWatched: {
-        type: Number,
-        default: 0,
-      },
-      minutesWatched: {
-        type: Number,
-        default: 0,
-      },
-    }),
-    default: [],
-  }]
 });
 
 const List = mongoose.model('List', listSchema);
