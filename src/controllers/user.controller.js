@@ -36,7 +36,6 @@ const updatePassword = catchAsync(async (req, res, next) => {
     const error = new Error('Une erreur est survenue lors de la mise à jour');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
-    console.log(res.status);
     successF('Le mot de passe a bien été modifié', varLogged, httpStatus.OK, res, next);
   }
 });
@@ -55,7 +54,7 @@ const generateResetPasswordKey = catchAsync(async (req, res, next) => {
   const varLogged = await userService.generateResetPasswordKey(req.body);
   if (varLogged === 'Error when send email') {
     const error = new Error('Une erreur est survenue lors de l\'envoie de l\'email');
-    errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
+    return errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   }
   successF('Si l\'email saisi existe, il recevra un email avec un lien pour reset son mot de passe !', varLogged, httpStatus.OK, res, next);
 });
@@ -64,7 +63,7 @@ const resetPassword = catchAsync(async (req, res, next) => {
   const varLogged = await userService.resetPassword(req.body);
   if (['Reset password key is invalid', 'Invalid credential', 'Error when saving new password'].includes(varLogged)) {
     const error = new Error('La clé n\'existe pas ou les informations saisies sont incorrect');
-    errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
+    return errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   }
   successF('Le mot de passe a bien été modifié', varLogged, httpStatus.OK, res, next);
 });
