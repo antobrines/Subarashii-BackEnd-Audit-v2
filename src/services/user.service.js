@@ -11,6 +11,7 @@ const {
 const {
   sendMail
 } = require('../utils/mailer');
+const banService = require('./ban.service');
 
 const create = async (userBody) => {
   if (userBody.password)
@@ -186,26 +187,6 @@ const update = async (req) => {
   return 'Error when saving data';
 };
 
-const ban = async (userId) => {
-  return User.findOneAndUpdate({
-    _id: userId
-  }, {
-    banned: true
-  }, {
-    new: true
-  });
-};
-
-const unban = async (userId) => {
-  return User.findOneAndUpdate({
-    _id: userId
-  }, {
-    banned: false
-  }, {
-    new: true
-  });
-};
-
 const getAllUsers = async (pagination, search) => {
   const user = await User.paginate({
     $or: [{
@@ -220,12 +201,16 @@ const getAllUsers = async (pagination, search) => {
       }
     }]
   }, pagination);
-  user.docs.forEach((userMap, key) => {
-    const newUser = userMap.toObject();
-    delete newUser.password;
-    delete newUser.roles;
-    user.docs[key] = newUser;
-  });
+
+
+  for await (const [i, userN] of user.docs.entries()) {
+    const nUser = userN.toObject()
+    delete nUser.password;
+    delete nUser.roles;
+    nUser.ban = await banService.getLastBan(nUser._id);
+    nUser.isBanned = await banService.isBanned(nUser._id);
+    user.docs[i] = nUser;
+  }
 
   return user;
 };
@@ -241,7 +226,5 @@ module.exports = {
   generateResetPasswordKey,
   resetPassword,
   me,
-  ban,
-  unban,
   getAllUsers
 };

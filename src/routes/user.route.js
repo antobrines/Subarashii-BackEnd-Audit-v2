@@ -27,6 +27,7 @@ router.post('/password/reset/', validate(authValidation.resetPassword), userCont
 
 router.patch('/ban/:userId', [isConnected, isAdmin], adminController.ban);
 router.patch('/unban/:userId', [isConnected, isAdmin], adminController.unban);
+router.get('/isbanned/:userId', [isConnected, isAdmin], adminController.isBanned);
 
 router.get('/all', [isConnected, isAdmin, validate(authValidation.getAllUsers)], adminController.getAllUsers);
 

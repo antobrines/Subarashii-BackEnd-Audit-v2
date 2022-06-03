@@ -21,12 +21,7 @@ const userSchema = mongoose.Schema({
     type: types.Array,
     required: true,
     default: ['user'],
-  },
-  banned: {
-    type: types.Boolean,
-    required: true,
-    default: false,
-  },
+  }
 });
 
 userSchema.plugin(mongoosePaginate);

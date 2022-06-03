@@ -5,6 +5,7 @@ const {
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const userService = require('../services/user.service');
+const banService = require('../services/ban.service');
 
 const isConnected = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -25,8 +26,8 @@ const isConnected = async (req, res, next) => {
 };
 
 const isBanned = async (req, res, next) => {
-  const user = await userService.findOneById(req);
-  if (user.banned) {
+  const banned = await banService.isBanned(req.user.userId);
+  if (banned) {
     const err = new Error('Vous êtes banni');
     return errorF(err.message, err, httpStatus.UNAUTHORIZED, res, next);
   }
