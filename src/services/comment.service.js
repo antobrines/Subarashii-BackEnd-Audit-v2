@@ -57,7 +57,7 @@ const getAllCommentByAnimeId = async (animeId) => {
   });
 };
 
-const getMyComment = async (userId) => {
+const getUserComments = async (userId) => {
   return Comment.find({
     userId: userId
   });
@@ -136,7 +136,7 @@ module.exports = {
   update,
   remove,
   getAllCommentByAnimeId,
-  getMyComment,
+  getUserComments,
   likeComment,
   dislikeComment,
   getNumberOfCommentsLiked
