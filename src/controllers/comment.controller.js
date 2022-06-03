@@ -66,7 +66,6 @@ const getUserComments = catchAsync(async (req, res, next) => {
   const {
     userId
   } = req.params;
-  console.log(req.params);
   const comments = await commentService.getUserComments(userId);
   successF('Mes commentaires', comments, httpStatus.OK, res, next);
 });
