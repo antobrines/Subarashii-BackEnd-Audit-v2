@@ -52,5 +52,16 @@ router.patch(
   commentController.dislikeComment
 );
 
+router.get(
+  '/my',
+  [isConnected, isBanned],
+  commentController.getMyComments
+);
+
+router.get(
+  '/:userId',
+  [isConnected, isAdmin],
+  commentController.getUserComments
+);
 
 module.exports = router;

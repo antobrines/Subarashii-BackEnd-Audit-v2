@@ -56,6 +56,21 @@ const dislikeComment = catchAsync(async (req, res, next) => {
   successF('Comment Disliked', comment, httpStatus.OK, res, next);
 });
 
+const getMyComments = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  const comments = await commentService.getUserComments(user.userId);
+  successF('Mes commentaires', comments, httpStatus.OK, res, next);
+});
+
+const getUserComments = catchAsync(async (req, res, next) => {
+  const {
+    userId
+  } = req.params;
+  console.log(req.params);
+  const comments = await commentService.getUserComments(userId);
+  successF('Mes commentaires', comments, httpStatus.OK, res, next);
+});
+
 
 module.exports = {
   create,
@@ -63,5 +78,7 @@ module.exports = {
   remove,
   getAllCommentByAnimeId,
   likeComment,
-  dislikeComment
+  dislikeComment,
+  getMyComments,
+  getUserComments
 };
