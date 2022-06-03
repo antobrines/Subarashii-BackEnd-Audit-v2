@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const commentService = require('../services/comment.service');
+const animeService = require('../services/anime.service');
 const httpStatus = require('http-status');
 const {
   successF
@@ -67,7 +68,14 @@ const getUserComments = catchAsync(async (req, res, next) => {
     userId
   } = req.params;
   const comments = await commentService.getUserComments(userId);
-  successF('Mes commentaires', comments, httpStatus.OK, res, next);
+  const validKeys = ['original_name', 'poster_path', 'name'];
+  var newComments = await Promise.all(comments.map(async comment => {
+    const newComment = JSON.parse(JSON.stringify(comment));
+    newComment.anime = await animeService.getAnimeById(comment.animeId);
+    Object.keys(newComment.anime).forEach((key) => validKeys.includes(key) || delete newComment.anime[key]);
+    return newComment;
+  }));
+  successF('Mes commentaires', newComments, httpStatus.OK, res, next);
 });
 
 
