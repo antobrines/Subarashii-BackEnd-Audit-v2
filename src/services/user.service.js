@@ -206,6 +206,29 @@ const unban = async (userId) => {
   });
 };
 
+const getAllUsers = async (pagination, search) => {
+  const user = await User.paginate({
+    $or: [{
+      username: {
+        $regex: search,
+        $options: 'i'
+      }
+    }, {
+      email: {
+        $regex: search,
+        $options: 'i'
+      }
+    }]
+  }, pagination);
+  user.docs.forEach((userMap, key) => {
+    const newUser = userMap.toObject();
+    delete newUser.password;
+    delete newUser.roles;
+    user.docs[key] = newUser;
+  });
+
+  return user;
+};
 
 
 module.exports = {
@@ -219,5 +242,6 @@ module.exports = {
   resetPassword,
   me,
   ban,
-  unban
+  unban,
+  getAllUsers
 };
