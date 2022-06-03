@@ -53,7 +53,7 @@ const getAllUsers = {
   query: Joi.object().keys({
     page: Joi.number().integer().min(1).required(),
     limit: Joi.number().integer().min(1).required(),
-    search: Joi.string().min(2).max(30).required(),
+    search: Joi.string().allow(null, ''),
   })
 }
 

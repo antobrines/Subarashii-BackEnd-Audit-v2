@@ -37,6 +37,9 @@ const getAllUsers = catchAsync(async (req, res, next) => {
   const paramsQuery = {
     limit: req.query.limit,
     page: req.query.page,
+    sort: {
+      username: 1
+    }
   };
   const users = await userService.getAllUsers(paramsQuery, search);
   successF('users', users, httpStatus.OK, res, next);
