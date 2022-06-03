@@ -18,9 +18,9 @@ const getAnime = catchAsync(async (req, res, next) => {
 });
 
 const getEpisodes = catchAsync(async (req, res, next) => {
-  const { id, seasonId } = req.params;
-  const episodes = await animeService.getEpisodes({ id, seasonId });
-  successF(`Get episodes of season ${seasonId}` , episodes, httpStatus.OK, res, next);
+  const { id, seasonNumber } = req.params;
+  const episodes = await animeService.getEpisodes({ id, seasonNumber });
+  successF(`Get episodes of season ${seasonNumber}` , episodes, httpStatus.OK, res, next);
 });
 
 module.exports = {
