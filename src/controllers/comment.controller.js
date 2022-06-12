@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const commentService = require('../services/comment.service');
+const notificationService = require('../services/notification.service');
 const animeService = require('../services/anime.service');
 const httpStatus = require('http-status');
 const {
