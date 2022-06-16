@@ -13,3 +13,10 @@ router.get(
   [ isConnected ],
   notificationController.getNotifications
 );
+router.patch(
+  '/:notificationId/view',
+  [ isConnected ],
+  notificationController.readNotification
+);
+
+module.exports = router;

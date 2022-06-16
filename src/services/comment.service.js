@@ -123,7 +123,7 @@ const dislikeComment = async (id, userId) => {
       }
     });
   }
-  const commentObject = Comment.findOneAndUpdate({
+  const commentObject = await Comment.findOneAndUpdate({
     _id: id
   }, {
     $push: {
