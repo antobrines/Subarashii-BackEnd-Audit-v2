@@ -28,7 +28,7 @@ const addAnime = {
 
 const seeEpisode = {
   body: Joi.object().keys({
-    episodeId: Joi.string().required(),
+    episodeId: Joi.number().integer().min(1),
   })
 };
 
