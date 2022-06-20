@@ -1,4 +1,5 @@
 const config = require('../config/index');
+const Anime = require('../models/anime.model');
 const fetch = require('node-fetch');
 
 const tmdbRequest = async url => {
