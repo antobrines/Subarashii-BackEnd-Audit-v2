@@ -32,13 +32,13 @@ router.post(
 
 router.patch(
   '/:listId/anime/:animeId/see',
-  [ isConnected, validate(listValidation.episodeSeen) ],
+  [ isConnected, validate(listValidation.seeEpisode) ],
   listController.episodeSeen
 );
 
 router.patch(
   '/:listId/anime/:animeId/unsee',
-  [ isConnected, validate(listValidation.episodeUnseen) ],
+  [ isConnected, validate(listValidation.seeEpisode) ],
   listController.episodeUnseen
 );
 
@@ -50,7 +50,7 @@ router.post(
 
 router.delete(
   '/:listId/anime/:animeId',
-  [ isConnected, validate(listValidation.seeEpisode)],
+  [ isConnected ],
   listController.removeAnime
 );
 

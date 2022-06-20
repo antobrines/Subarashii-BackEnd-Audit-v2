@@ -23,7 +23,7 @@ const getMultipleAnimes = async ({
 const getAnimeById = async id => {
   const remoteAnime = await tmdbRequest(`/tv/${id}`);
   const localAnime = await Anime.findOne({ id });
-  return { ...remoteAnime, ...localAnime.episodesWatched };
+  return { ...remoteAnime, episodesWatched: localAnime?.episodesWatched };
 };
 
 const getEpisodes = async ({ id, seasonNumber }) => await tmdbRequest(`/tv/${id}/season/${seasonNumber}`);

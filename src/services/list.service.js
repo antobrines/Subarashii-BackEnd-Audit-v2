@@ -2,10 +2,10 @@ const List = require('../models/list.model');
 const Anime = require('../models/anime.model');
 const animeService = require('./anime.service');
 
-const getUserLists = ({ userId, containing}) => {
+const getUserLists = async ({ userId, containing }) => {
   if (containing) {
-    const anime = Anime.find({ id: containing });
-    return anime.list || 'List not found';
+    const anime = await Anime.findOne({ id: containing });
+    return anime.list;
   } else {
     return List.find({ owner: userId });  
   }
@@ -53,6 +53,7 @@ const addAnime = async ({ listId, animeId, animeCategories, userId }) => {
     throw new Error('You cannot update this list');
   }
   const animeExists = await Anime.findOne({ id: animeId, list: listId });
+  console.log(animeExists);
   if (animeExists) {
     throw new Error('Anime already in list');
   }
