@@ -25,10 +25,6 @@ const notificationSchema = mongoose.Schema({
     type: mongoose.Schema.Types.Boolean,
     default: false
   },
-  // opened: {
-  //   type: mongoose.Schema.Types.Boolean,
-  //   default: false
-  // },
 });
 
 const Notification = mongoose.model('Notification', notificationSchema);
