@@ -28,7 +28,8 @@ const isConnected = async (req, res, next) => {
 const isBanned = async (req, res, next) => {
   const banned = await banService.isBanned(req.user.userId);
   if (banned) {
-    const err = new Error('Vous êtes banni');
+    const lastBan = await banService.getLastBan(req.user.userId);
+    const err = new Error(`Vous êtes jusqu'au ${lastBan.date} banni pour la raison suivante : ${lastBan.reason}`);
     return errorF(err.message, err, httpStatus.UNAUTHORIZED, res, next);
   }
   return next();

@@ -59,9 +59,10 @@ const login = async (req) => {
   if (!user) {
     return 'Invalid Credentiel';
   }
-
-  if (user.banned) {
-    return 'User is banned';
+  const isBanned = await banService.isBanned(user._id);
+  if (isBanned) {
+    const lastBan = await banService.getLastBan(user._id);
+    return `Vous êtes banni jusqu'au ${lastBan.date} pour la raison suivante : ${lastBan.reason}`;
   }
   const accessToken = await jwt.sign({
     email: user.email,
@@ -207,6 +208,7 @@ const getAllUsers = async (pagination, search) => {
     const nUser = userN.toObject()
     delete nUser.password;
     delete nUser.roles;
+    delete nUser.banned;
     nUser.ban = await banService.getLastBan(nUser._id);
     nUser.isBanned = await banService.isBanned(nUser._id);
     user.docs[i] = nUser;

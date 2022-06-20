@@ -3,12 +3,10 @@ const {
 } = require('../models');
 
 const isBanned = async (userId) => {
-  const ban = await Ban.findOne({
-    userId: userId
-  });
+  const ban = await getLastBan(userId);
   if (ban) {
-    const date = new Date();
-    const banDate = new Date(ban.date);
+    const date = new Date().toLocaleDateString("fr-FR");
+    const banDate = new Date(ban.date).toLocaleDateString("fr-FR");
     if (date < banDate) {
       return true;
     }
@@ -17,9 +15,10 @@ const isBanned = async (userId) => {
 };
 
 const ban = async (userId, date, reason) => {
+  const newDate = new Date(date);
   const ban = await Ban.create({
     userId: userId,
-    date: date,
+    date: newDate,
     reason: reason
   });
   return ban;
@@ -33,7 +32,6 @@ const unban = async (userId) => {
     }
   });
   if (bans.length > 0) {
-    // update all the bans the date to 1970-01-01 and add the date to lastDate
     bans.forEach(async ban => {
       ban.lastDate = ban.date;
       ban.date = new Date('1970-01-01');
@@ -45,7 +43,7 @@ const unban = async (userId) => {
 };
 
 const getLastBan = async (userId) => {
-  return await Ban.findOne({
+  return Ban.findOne({
     userId: userId
   }).sort({
     date: -1
