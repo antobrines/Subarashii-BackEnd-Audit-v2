@@ -22,10 +22,7 @@ const getListAnimes = async ({ userId, listId }) => {
   //const animesPerPage = 6;
   const animesPage = await Anime.find({ list: listId });
   //const animesPage = animes.slice((page - 1) * animesPerPage, page * animesPerPage);
-  return Promise.all(animesPage.map(anime => ({
-    ...animeService.getAnimeById(anime.id),
-    episodesWatched: anime.episodesWatched,
-  })));
+  return Promise.all(animesPage.map(anime => animeService.getAnimeById(anime.id) ));
 };
 
 const getAllAnimes = async ({ userId }) => {
