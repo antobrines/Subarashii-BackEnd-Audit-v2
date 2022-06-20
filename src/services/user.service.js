@@ -205,7 +205,7 @@ const getAllUsers = async (pagination, search) => {
 
 
   for await (const [i, userN] of user.docs.entries()) {
-    const nUser = userN.toObject()
+    const nUser = userN.toObject();
     delete nUser.password;
     delete nUser.roles;
     delete nUser.banned;
