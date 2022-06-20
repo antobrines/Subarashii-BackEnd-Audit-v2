@@ -26,9 +26,16 @@ const addAnime = {
   }),
 };
 
+const seeEpisode = {
+  body: Joi.object().keys({
+    episodeId: Joi.string().required(),
+  })
+};
+
 module.exports = {
   getAllLists,
   getListAnimes,
   create,
-  addAnime
+  addAnime,
+  seeEpisode
 };

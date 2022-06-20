@@ -50,13 +50,13 @@ router.post(
 
 router.delete(
   '/:listId/anime/:animeId',
-  [ isConnected ],
+  [ isConnected, validate(listValidation.seeEpisode)],
   listController.removeAnime
 );
 
 router.delete(
   '/:listId',
-  [ isConnected ],
+  [ isConnected, validate(listValidation.seeEpisode) ],
   listController.deleteList
 );
 
