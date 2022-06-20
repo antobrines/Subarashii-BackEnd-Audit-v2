@@ -2,7 +2,14 @@ const List = require('../models/list.model');
 const Anime = require('../models/anime.model');
 const animeService = require('./anime.service');
 
-const getUserLists = userId => List.find({ owner: userId });
+const getUserLists = ({ userId, containing}) => {
+  if (containing) {
+    const anime = Anime.find({ id: containing });
+    return anime.list || 'List not found';
+  } else {
+    return List.find({ owner: userId });  
+  }
+};
 
 const getListAnimes = async ({ userId, listId, page = 1 }) => {
   const list = await List.findById(listId);
@@ -104,13 +111,13 @@ const episodeSeen = async ({ listId, animeId, episodeId, userId }) => {
     throw new Error('Episode already seen');
   }
   if (anime.episodesWatched.length === 0) {
-    const toSeeList = await List.findOne({ label: 'En cours', owner: userId });
-    anime.list = toSeeList._id;
+    const watchingList = await List.findOne({ label: 'En cours', owner: userId });
+    anime.list = watchingList._id;
   } else {
     const animeDetails = await animeService.getAnimeById(animeId);
     if (anime.episodesWatched === animeDetails.number_of_episodes) {
-      const toSeeList = await List.findOne({ label: 'Terminée', owner: userId });
-      anime.list = toSeeList._id;
+      const seenList = await List.findOne({ label: 'Terminée', owner: userId });
+      anime.list = seenList._id;
     }
   }
   

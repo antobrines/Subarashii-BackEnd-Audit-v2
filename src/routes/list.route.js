@@ -3,11 +3,12 @@ const listController = require('../controllers/list.controller');
 const listValidation = require('../validations/list.validation');
 const validate = require('../middlewares/validate');
 const { isConnected } = require('../middlewares/user.middleware');
+const { RuleTester } = require('eslint');
 const router = express.Router();
 
 router.get(
   '/',
-  [ isConnected ],
+  [ isConnected, validate(listValidation.getAllLists) ],
   listController.getUserLists
 );
 
