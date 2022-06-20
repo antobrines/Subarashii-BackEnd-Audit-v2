@@ -8,7 +8,7 @@ const {
 const getNotifications = catchAsync(async (req, res, next) => {
   const { userId } = req.user;
   const notificationsList = await notificationsService.getNotifications(userId);
-  return successF('User lists recovered', notificationsList, httpStatus.OK, res, next);
+  return successF('Liste d\'utilisateur récupéré', notificationsList, httpStatus.OK, res, next);
 });
 
 const readNotification = catchAsync(async (req, res, next) => {
@@ -19,7 +19,7 @@ const readNotification = catchAsync(async (req, res, next) => {
     const error = new Error(message);
     return errorF(message, error, httpStatus.BAD_REQUEST, res, next);
   }else{
-    return successF('Notification has been readed !', message,  httpStatus.OK, res, next);
+    return successF('La notification a bien été lu !', message,  httpStatus.OK, res, next);
   }
 });
 
