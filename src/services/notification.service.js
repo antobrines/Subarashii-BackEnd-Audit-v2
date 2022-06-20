@@ -1,7 +1,3 @@
-const catchAsync = require('../utils/catchAsync');
-const notificationService = require('./notification.service');
-const {successF} = require('../utils/message');
-const httpStatus = require('http-status');
 const {
   Notification, User, Comment
 } = require('../models');
@@ -55,7 +51,7 @@ const readNotification = async (notificationId, userId) => {
   if(notification){
     return notification;
   }else{
-    return 'The notification cannot be found or has already been viewed!';
+    return 'La notification n\'a pas été trouvé ou a déjà été vue !';
   }
 };
 

@@ -15,7 +15,7 @@ const readNotification = catchAsync(async (req, res, next) => {
   const { userId } = req.user;
   const { notificationId } = req.params;
   const message = await notificationsService.readNotification(notificationId, userId);
-  if(message === 'The notification cannot be found or has already been viewed!'){
+  if(message === 'La notification n\'a pas été trouvé ou a déjà été vue !'){
     const error = new Error(message);
     return errorF(message, error, httpStatus.BAD_REQUEST, res, next);
   }else{
