@@ -141,9 +141,8 @@ const episodeUnseen = async ({ listId, animeId, episodeId, userId }) => {
   if (!anime.episodesWatched.includes(episodeId)) {
     throw new Error('Episode not seen');
   }
+  anime.episodesWatched = anime.episodesWatched.filter(a => a !== String(episodeId));
 
-  anime.episodesWatched = anime.episodesWatched.filter(a => a !== episodeId);
-  
   return anime.save();
 };
 
