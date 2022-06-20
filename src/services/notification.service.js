@@ -32,8 +32,7 @@ const getNotifications = async (userId) => {
 const notifLikeComment = async (comment, user) => {
   return Notification.create({
     reactor: user,
-    comment: comment,
-    type: 'like'
+    comment: comment
   });
 };
 
