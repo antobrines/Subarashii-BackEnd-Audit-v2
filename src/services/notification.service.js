@@ -15,7 +15,6 @@ const getNotifications = async (userId) => {
 
   for(const indexNotification in notifications){
     const notification = notifications[indexNotification];
-    console.log(notification.reactor);
     notification.reactor = await User.findOne({_id: notification.reactor});
     result.notifications[result.notifications.length] = notification;
     notification.comment = await Comment.findOne({_id: notification.comment});
