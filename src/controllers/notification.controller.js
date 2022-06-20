@@ -7,8 +7,8 @@ const {
 
 const getNotifications = catchAsync(async (req, res, next) => {
   const { userId } = req.user;
-  const lists = await notificationsService.getNotifications(userId);
-  return successF('User lists recovered', lists, httpStatus.OK, res, next);
+  const notificationsList = await notificationsService.getNotifications(userId);
+  return successF('User lists recovered', notificationsList, httpStatus.OK, res, next);
 });
 
 const readNotification = catchAsync(async (req, res, next) => {
