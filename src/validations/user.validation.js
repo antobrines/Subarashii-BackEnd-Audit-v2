@@ -55,7 +55,7 @@ const getAllUsers = {
     limit: Joi.number().integer().min(1).required(),
     search: Joi.string().allow(null, ''),
   })
-}
+};
 
 module.exports = {
   register,
