@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const types = mongoose.Schema.Types;
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const userSchema = mongoose.Schema({
   username: {
@@ -20,13 +21,10 @@ const userSchema = mongoose.Schema({
     type: types.Array,
     required: true,
     default: ['user'],
-  },
-  banned: {
-    type: types.Boolean,
-    required: true,
-    default: false,
-  },
+  }
 });
+
+userSchema.plugin(mongoosePaginate);
 
 const User = mongoose.model('User', userSchema);
 

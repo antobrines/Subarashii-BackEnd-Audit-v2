@@ -71,7 +71,7 @@ const getUserComments = catchAsync(async (req, res, next) => {
   const comments = await commentService.getUserComments(userId);
   const validKeys = ['original_name', 'poster_path', 'name'];
   var newComments = await Promise.all(comments.map(async comment => {
-    const newComment = JSON.parse(JSON.stringify(comment));
+    const newComment = comment.toObject();
     newComment.anime = await animeService.getAnimeById(comment.animeId);
     Object.keys(newComment.anime).forEach((key) => validKeys.includes(key) || delete newComment.anime[key]);
     return newComment;

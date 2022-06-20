@@ -11,6 +11,7 @@ const {
 const {
   sendMail
 } = require('../utils/mailer');
+const banService = require('./ban.service');
 
 const create = async (userBody) => {
   if (userBody.password)
@@ -58,9 +59,10 @@ const login = async (req) => {
   if (!user) {
     return 'Invalid Credentiel';
   }
-
-  if (user.banned) {
-    return 'User is banned';
+  const isBanned = await banService.isBanned(user._id);
+  if (isBanned) {
+    const lastBan = await banService.getLastBan(user._id);
+    return `Vous êtes banni jusqu'au ${lastBan.date} pour la raison suivante : ${lastBan.reason}`;
   }
   const accessToken = await jwt.sign({
     email: user.email,
@@ -186,26 +188,34 @@ const update = async (req) => {
   return 'Error when saving data';
 };
 
-const ban = async (userId) => {
-  return User.findOneAndUpdate({
-    _id: userId
-  }, {
-    banned: true
-  }, {
-    new: true
-  });
-};
+const getAllUsers = async (pagination, search) => {
+  const user = await User.paginate({
+    $or: [{
+      username: {
+        $regex: search,
+        $options: 'i'
+      }
+    }, {
+      email: {
+        $regex: search,
+        $options: 'i'
+      }
+    }]
+  }, pagination);
 
-const unban = async (userId) => {
-  return User.findOneAndUpdate({
-    _id: userId
-  }, {
-    banned: false
-  }, {
-    new: true
-  });
-};
 
+  for await (const [i, userN] of user.docs.entries()) {
+    const nUser = userN.toObject()
+    delete nUser.password;
+    delete nUser.roles;
+    delete nUser.banned;
+    nUser.ban = await banService.getLastBan(nUser._id);
+    nUser.isBanned = await banService.isBanned(nUser._id);
+    user.docs[i] = nUser;
+  }
+
+  return user;
+};
 
 
 module.exports = {
@@ -218,6 +228,5 @@ module.exports = {
   generateResetPasswordKey,
   resetPassword,
   me,
-  ban,
-  unban
+  getAllUsers
 };
