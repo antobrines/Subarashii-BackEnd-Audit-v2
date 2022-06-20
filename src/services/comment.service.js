@@ -83,7 +83,7 @@ const likeComment = async (id, userId) => {
       }
     });
   }
-  let commentObject = await Comment.findOneAndUpdate({
+  const commentObject = await Comment.findOneAndUpdate({
     _id: id
   }, {
     $push: {
