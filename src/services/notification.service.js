@@ -35,7 +35,7 @@ const getNotifications = async (userId) => {
 };
 
 const notifLikeComment = async (comment, user) => {
-  return await Notification.create({
+  return Notification.create({
     reactor: user,
     comment: comment,
     type: 'like'
@@ -43,7 +43,7 @@ const notifLikeComment = async (comment, user) => {
 };
 
 const notifDislikeComment = async (comment, user) => {
-  return await Notification.create({
+  return Notification.create({
     reactor: user,
     comment: comment,
     type: 'dislike'
