@@ -19,8 +19,8 @@ const login = catchAsync(async (req, res, next) => {
     const error = new Error('L\'adresse mail ou le mot de passe est invalide');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
   } else {
-    if (varLogged === 'User is banned') {
-      const error = new Error('Vous êtes banni');
+    if (varLogged.includes('Vous êtes banni')) {
+      const error = new Error(varLogged);
       return errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
     }
     successF('La connexion à bien été effectué', varLogged, httpStatus.OK, res, next);
