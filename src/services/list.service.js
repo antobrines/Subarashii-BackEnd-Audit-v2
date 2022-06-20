@@ -11,7 +11,7 @@ const getUserLists = ({ userId, containing}) => {
   }
 };
 
-const getListAnimes = async ({ userId, listId, page = 1 }) => {
+const getListAnimes = async ({ userId, listId }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -19,9 +19,9 @@ const getListAnimes = async ({ userId, listId, page = 1 }) => {
   if (!list.owner.equals(userId)) {
     throw new Error('You cannot update this list');
   }
-  const animesPerPage = 6;
-  const animes = await Anime.find({ list: listId });
-  const animesPage = animes.slice((page - 1) * animesPerPage, page * animesPerPage);
+  //const animesPerPage = 6;
+  const animesPage = await Anime.find({ list: listId });
+  //const animesPage = animes.slice((page - 1) * animesPerPage, page * animesPerPage);
   return Promise.all(animesPage.map(anime => animeService.getAnimeById(anime.id) ));
 };
 
