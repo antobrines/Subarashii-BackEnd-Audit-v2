@@ -68,7 +68,7 @@ const login = async (body) => {
     username: user.username,
     userId: user._id,
     roles: user.roles
-  }, config.token.secret);
+  }, config.token.secret || 'c2prZG5ma25zZGtjcWtzLGRma2xkc2Y=');
 
   const test = await compareAsync(password, user.password);
   if (test) {
