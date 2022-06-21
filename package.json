@@ -27,6 +27,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "node src/index.js",
+    "lint": "./node_modules/.bin/eslint ./",
     "test": "mocha --recursive --exit src/tests"
   }
 }

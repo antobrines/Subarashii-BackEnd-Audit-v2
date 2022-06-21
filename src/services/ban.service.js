@@ -5,8 +5,8 @@ const {
 const isBanned = async (userId) => {
   const ban = await getLastBan(userId);
   if (ban) {
-    const date = new Date().toLocaleDateString("fr-FR");
-    const banDate = new Date(ban.date).toLocaleDateString("fr-FR");
+    const date = new Date().toLocaleDateString('fr-FR');
+    const banDate = new Date(ban.date).toLocaleDateString('fr-FR');
     if (date < banDate) {
       return true;
     }
