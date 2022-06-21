@@ -10,7 +10,7 @@ const getListAnimes = async ({ userId, listId, page = 1 }) => {
     throw new Error('List not found');
   }
   if (!list.owner.equals(userId)) {
-    throw new Error('You cannot update this list');
+    throw new Error('You cannot access this list');
   }
   const animesPerPage = 6;
   const animes = await Anime.find({ list: listId });
