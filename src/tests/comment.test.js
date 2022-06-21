@@ -133,7 +133,7 @@ describe('Comments', () => {
         content = faker.lorem.sentence();
       }
       const comment = {
-        content: faker.lorem.sentence(),
+        content: content,
         animeId: animeId,
         userId: newUser._id,
       }
