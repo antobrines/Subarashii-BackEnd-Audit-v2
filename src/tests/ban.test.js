@@ -24,7 +24,7 @@ const generateBan = () => {
     reason: faker.lorem.sentence(),
   };
   return ban;
-}
+};
 
 
 describe('Ban', () => {
@@ -32,7 +32,7 @@ describe('Ban', () => {
     const banData = generateBan();
     const user = generateUser();
     const newUser = await userService.create(user);
-    const ban = await banService.ban(newUser._id, banData.date, banData.reason);
+    await banService.ban(newUser._id, banData.date, banData.reason);
     const isBanned = await banService.isBanned(newUser._id);
     assert.equal(isBanned, true);
   }).timeout(5000);
@@ -45,7 +45,7 @@ describe('Ban', () => {
     const isBanned = await banService.isBanned(newUser._id);
     assert.equal(isBanned, true);
     await banService.unban(newUser._id);
-    const ban = await banService.getLastBan(newUser._id);
+    await banService.getLastBan(newUser._id);
     const isBannedAfterUnban = await banService.isBanned(newUser._id);
     assert.equal(isBannedAfterUnban, false);
   }).timeout(5000);

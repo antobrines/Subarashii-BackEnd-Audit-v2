@@ -14,7 +14,7 @@ const generateUser = () => {
     confirm_password: password,
     username: faker.internet.userName(),
   };
-}
+};
 
 const generateComment = (userId) => {
   let content = faker.lorem.sentence();
@@ -26,7 +26,7 @@ const generateComment = (userId) => {
     animeId: faker.random.numeric(),
     userId: userId,
   };
-}
+};
 
 describe('Notifications', () => {
   it('like comment', async () => {

@@ -14,7 +14,7 @@ const generateUser = () => {
     confirm_password: password,
     username: faker.internet.userName(),
   };
-}
+};
 
 const generateComment = (userId) => {
   let content = faker.lorem.sentence();
@@ -26,7 +26,7 @@ const generateComment = (userId) => {
     animeId: faker.random.numeric(),
     userId: userId,
   };
-}
+};
 
 describe('Comments', () => {
 
@@ -116,7 +116,7 @@ describe('Comments', () => {
         content: content,
         animeId: animeId,
         userId: newUser._id,
-      }
+      };
       await commentService.create(comment);
     }
     const comments = await commentService.getAllCommentByAnimeId(animeId);
@@ -136,7 +136,7 @@ describe('Comments', () => {
         content: content,
         animeId: animeId,
         userId: newUser._id,
-      }
+      };
       await commentService.create(comment);
     }
     const comments = await commentService.getUserComments(newUser._id);
