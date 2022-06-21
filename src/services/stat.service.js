@@ -31,10 +31,14 @@ const getAnimeStat = async (userId) => {
 };
 
 const getListStat = async (userId) => {
-  const lists = await listService.getUserLists(userId);
+  const lists = await listService.getUserLists({
+    userId
+  });
   const listsStat = [];
   lists.forEach(list => {
-    const nbAnimes = list.animes.length;
+    let nbAnimes = 0;
+    if (typeof list.get('animes') !== 'undefined')
+      nbAnimes = list.get('animes').length;
     const listStat = {
       name: list.label,
       nbAnime: nbAnimes
@@ -45,14 +49,25 @@ const getListStat = async (userId) => {
 };
 
 const getGenresStat = async (userId) => {
-  const lists = await listService.getUserLists(userId);
+  const lists = await listService.getUserLists({
+    userId
+  });
   const genres = [];
-  lists.forEach(list => list.animes.forEach(anime => {
-    const currentGenres = anime.get('categories');
-    currentGenres.forEach(genre => {
-      genres.push(genre);
-    });
-  }));
+  lists.forEach(list => {
+    try {
+      if (typeof list.get('animes') !== 'undefined') {
+        const animeList = [...list.get('animes')];
+        animeList.forEach(anime => {
+          const currentGenres = anime.categories;
+          currentGenres.forEach(genre => {
+            genres.push(genre);
+          });
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  });
   const setGenres = [...new Set(genres)];
   const genresStat = [];
   setGenres.forEach(genre => {
