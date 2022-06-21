@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/', validate(animeValidation.getMultipleAnimes), animeController.getMultipleAnimes);
 router.get('/:id', animeController.getAnime);
-router.get('/:id/season/:seasonId', animeController.getEpisodes);
+router.get('/:id/season/:seasonNumber', animeController.getEpisodes);
 
 module.exports = router;

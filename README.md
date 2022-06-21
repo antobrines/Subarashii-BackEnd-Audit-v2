@@ -382,6 +382,118 @@ Reset password of user
         }
     })
   ```
+## **Animes :** 
+
+### Get multiple animes
+
+* **URL**
+
+  /animes
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+  `page=number`
+
+  `categories=string`
+
+  `adult=boolean`
+
+  `status=number`
+
+* **Body Params**
+
+  None
+
+* **Sample Call:**
+
+  ```javascript
+    fetch('https://subarashii-backend.vercel.app/api/animes?page=1&categories=16,4535&status=1', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: {
+            username: 'John',
+            password: 'Doe69',
+            confirm_password: 'Doe69',
+            email: 'john_doe@lyon.fr'
+        }
+    })
+  ```
+
+### Get anime informations
+
+* **URL**
+
+  /animes/:animeId
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+  None
+
+* **Body Params**
+
+  None
+
+* **Sample Call:**
+
+  ```javascript
+    fetch('https://subarashii-backend.vercel.app/api/animes/8864', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: {
+            username: 'John',
+            password: 'Doe69',
+            confirm_password: 'Doe69',
+            email: 'john_doe@lyon.fr'
+        }
+    })
+  ```
+
+### Get anime season details
+
+* **URL**
+
+  /animes/:animeId/season/:seasonNumber
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+  None
+
+* **Body Params**
+
+  None
+
+* **Sample Call:**
+
+  ```javascript
+    fetch('https://subarashii-backend.vercel.app/api/animes/8864/season/1', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: {
+            username: 'John',
+            password: 'Doe69',
+            confirm_password: 'Doe69',
+            email: 'john_doe@lyon.fr'
+        }
+    })
+  ```
 
 ## **Stats :**
 

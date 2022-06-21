@@ -2,7 +2,7 @@ const config = require('../config/index');
 const fetch = require('node-fetch');
 
 const tmdbRequest = async url => {
-  const request = await fetch(`https://api.themoviedb.org/3/${url}`, {
+  const request = await fetch(`https://api.themoviedb.org/3${url}`, {
     method: 'GET',
     headers: { Authorization: config.apiToken}
   });
@@ -21,7 +21,7 @@ const getMultipleAnimes = async ({
 
 const getAnimeById = async id => await tmdbRequest(`/tv/${id}`);
 
-const getEpisodes = async ({ id, season }) => await tmdbRequest(`/tv/${id}/season/${season}`);
+const getEpisodes = async ({ id, seasonNumber }) => await tmdbRequest(`/tv/${id}/season/${seasonNumber}`);
 
 module.exports = {
   getMultipleAnimes,
