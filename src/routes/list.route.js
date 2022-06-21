@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get(
   '/',
-  [ isConnected ],
+  [ isConnected, validate(listValidation.getAllLists) ],
   listController.getUserLists
 );
 
@@ -31,13 +31,13 @@ router.post(
 
 router.patch(
   '/:listId/anime/:animeId/see',
-  [ isConnected, validate(listValidation.episodeSeen) ],
+  [ isConnected, validate(listValidation.seeEpisode) ],
   listController.episodeSeen
 );
 
 router.patch(
   '/:listId/anime/:animeId/unsee',
-  [ isConnected, validate(listValidation.episodeUnseen) ],
+  [ isConnected, validate(listValidation.seeEpisode) ],
   listController.episodeUnseen
 );
 
@@ -55,7 +55,7 @@ router.delete(
 
 router.delete(
   '/:listId',
-  [ isConnected ],
+  [ isConnected, validate(listValidation.seeEpisode) ],
   listController.deleteList
 );
 
