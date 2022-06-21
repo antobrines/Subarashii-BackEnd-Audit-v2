@@ -203,7 +203,6 @@ const getAllUsers = async (pagination, search) => {
     }]
   }, pagination);
 
-
   for await (const [i, userN] of user.docs.entries()) {
     const nUser = userN.toObject();
     delete nUser.password;
@@ -217,6 +216,19 @@ const getAllUsers = async (pagination, search) => {
   return user;
 };
 
+const getUser = async (userId) => {
+  const user = await User.findOne({
+    _id: userId
+  });
+  const nUser = user.toObject();
+  delete nUser.password;
+  delete nUser.roles;
+  delete nUser.banned;
+  nUser.ban = await banService.getLastBan(nUser._id);
+  nUser.isBanned = await banService.isBanned(nUser._id);
+  return nUser;
+};
+
 
 module.exports = {
   create,
@@ -228,5 +240,7 @@ module.exports = {
   generateResetPasswordKey,
   resetPassword,
   me,
-  getAllUsers
+  getAllUsers,
+  compareAsync,
+  getUser
 };

@@ -63,6 +63,14 @@ const getAllUsers = catchAsync(async (req, res, next) => {
   successF('users', users, httpStatus.OK, res, next);
 });
 
+const getUsers = async (req, res, next) => {
+  const {
+    userId
+  } = req.params;
+  const user = await userService.getUser(userId);
+  successF('user', user, httpStatus.OK, res, next);
+};
+
 
 
 module.exports = {
@@ -70,5 +78,6 @@ module.exports = {
   unban,
   removeComment,
   getAllUsers,
-  isBanned
+  isBanned,
+  getUsers
 };
