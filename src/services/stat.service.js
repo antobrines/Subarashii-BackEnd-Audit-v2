@@ -48,7 +48,7 @@ const getGenresStat = async (userId) => {
   const lists = await listService.getUserLists(userId);
   const genres = [];
   lists.forEach(list => list.animes.forEach(anime => {
-    currentGenres = anime.get('categories');
+    const currentGenres = anime.get('categories');
     currentGenres.forEach(genre => {
       genres.push(genre);
     });

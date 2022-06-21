@@ -22,7 +22,7 @@ const generateUser = () => {
     username: faker.internet.userName(),
   };
   return user;
-}
+};
 
 describe('Users', () => {
 

@@ -3,6 +3,7 @@ const {
 } = require('../models');
 const frenchBadwordsList = require('french-badwords-list');
 const BadWords = require('bad-words');
+const notificationService = require('./notification.service');
 const badWords = new BadWords({
   placeHolder: 'x',
   emptyList: true
@@ -87,7 +88,7 @@ const likeComment = async (id, userId) => {
       }
     });
   }
-  return Comment.findOneAndUpdate({
+  const commentObject = await Comment.findOneAndUpdate({
     _id: id
   }, {
     $push: {
@@ -96,6 +97,8 @@ const likeComment = async (id, userId) => {
   }, {
     new: true
   });
+  await notificationService.notifLikeComment(commentObject.id, userId);
+  return comment;
 };
 
 const getNumberOfCommentsLiked = async (userId) => {
@@ -125,7 +128,7 @@ const dislikeComment = async (id, userId) => {
       }
     });
   }
-  return Comment.findOneAndUpdate({
+  const commentObject = await Comment.findOneAndUpdate({
     _id: id
   }, {
     $push: {
@@ -134,6 +137,8 @@ const dislikeComment = async (id, userId) => {
   }, {
     new: true
   });
+  await notificationService.notifDislikeComment(commentObject.id, userId);
+  return commentObject;
 };
 
 module.exports = {
