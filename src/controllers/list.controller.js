@@ -7,7 +7,8 @@ const {
 
 const getUserLists = catchAsync(async (req, res, next) => {
   const { userId } = req.user;
-  const lists = await listService.getUserLists(userId);
+  const { containing } = req.query;
+  const lists = await listService.getUserLists({ userId, containing });
   successF('User lists recovered', lists, httpStatus.OK, res, next);
 });
 

@@ -1,4 +1,5 @@
 const config = require('../config/index');
+const Anime = require('../models/anime.model');
 const fetch = require('node-fetch');
 
 const tmdbRequest = async url => {
@@ -19,7 +20,11 @@ const getMultipleAnimes = async ({
   return await tmdbRequest(`/discover/tv?with_genres=${categories}&include_adult=${adults}${status && `&with_status=${status}`}&page=${page}&sort_by=${sort_by}&with_original_language=ja`);
 };
 
-const getAnimeById = async id => await tmdbRequest(`/tv/${id}`);
+const getAnimeById = async id => {
+  const remoteAnime = await tmdbRequest(`/tv/${id}`);
+  const localAnime = await Anime.findOne({ id });
+  return { ...remoteAnime, episodesWatched: localAnime?.episodesWatched };
+};
 
 const getEpisodes = async ({ id, seasonNumber }) => await tmdbRequest(`/tv/${id}/season/${seasonNumber}`);
 

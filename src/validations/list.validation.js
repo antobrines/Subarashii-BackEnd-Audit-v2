@@ -1,5 +1,11 @@
 const Joi = require('joi');
 
+const getAllLists = {
+  query: Joi.object().keys({
+    containing: Joi.number().integer().min(1).optional(),
+  }),
+};
+
 const getListAnimes = {
   query: Joi.object().keys({
     page: Joi.number().integer().min(1),
@@ -20,8 +26,16 @@ const addAnime = {
   }),
 };
 
+const seeEpisode = {
+  body: Joi.object().keys({
+    episodeId: Joi.number().integer().min(1),
+  })
+};
+
 module.exports = {
+  getAllLists,
   getListAnimes,
   create,
-  addAnime
+  addAnime,
+  seeEpisode
 };
