@@ -59,7 +59,7 @@ describe('Users', () => {
     const newUser = await userService.create(user);
     const auth = await userService.login({
       email: newUser.email,
-      password: 'wrong password'
+      password: 'wrong password' //NOSONAR
     });
     assert.equal(auth, 'Invalid Credentiel');
   }).timeout(5000);
@@ -69,7 +69,7 @@ describe('Users', () => {
     const newUser = await userService.create(user);
     const update = await userService.updatePassword(newUser._id, {
       previousPassword: user.confirm_password,
-      password: 'new password'
+      password: 'new password' //NOSONAR
     });
     assert.equal(update, undefined);
   }).timeout(5000);
@@ -79,7 +79,7 @@ describe('Users', () => {
     const newUser = await userService.create(user);
     const update = await userService.updatePassword(newUser._id, {
       previousPassword: 'wrong password',
-      password: 'new password'
+      password: 'new password' //NOSONAR
     });
     assert.equal(update, 'Password do not match');
   }).timeout(5000);
