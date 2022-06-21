@@ -34,7 +34,7 @@ const getListAnimes = async ({ userId, listId }) => {
 };
 
 const getAllAnimes = async ({ userId }) => {
-  const lists = await getUserLists(userId);
+  const lists = await getUserLists({ userId });
   const animes = Anime.find({
     list: {
       $in: lists.map((l) => l._id),
@@ -88,7 +88,6 @@ const addAnime = async ({ listId, animeId, animeCategories, userId }) => {
     id: animeId,
     list: listId,
   });
-  console.log(animeExists);
   if (animeExists) {
     throw new Error('Anime already in list');
   }

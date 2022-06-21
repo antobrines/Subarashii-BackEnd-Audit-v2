@@ -41,7 +41,7 @@ describe('Lists', () => {
     const user = await userService.create(generateUser());
     const list = { label: 'testList', owner: user._id };
     await listService.create(list);
-    const userLists = await listService.getUserLists(user._id);
+    const userLists = await listService.getUserLists({ userId: user._id });
     assert.equal(userLists.length, 1);
   }).timeout(5000);
 
@@ -255,6 +255,7 @@ describe('Lists', () => {
   describe('episodeSeen', async () => {
     it('should mark an episode as seen', async () => {
       const user = await userService.create(generateUser());
+      await listService.create({ label: 'En cours', owner: user._id });
       const list = await listService.create({ label: 'testList', owner: user._id });
       const anime = await listService.addAnime({ 
         userId: user._id, 
@@ -274,6 +275,7 @@ describe('Lists', () => {
     });
     it('should not see an episode already seen', async () => {
       const user = await userService.create(generateUser());
+      const watching = await listService.create({ label: 'En cours', owner: user._id });
       const list = await listService.create({ label: 'testList', owner: user._id });
       await listService.addAnime({ 
         userId: user._id, 
@@ -292,7 +294,7 @@ describe('Lists', () => {
         async () => await listService.episodeSeen({
           animeId: '1',
           userId: user._id,
-          listId: list._id,
+          listId: watching._id,
           episodeId: '1'
         }),
         {message: 'Episode already seen'}
@@ -304,6 +306,7 @@ describe('Lists', () => {
   describe('episodeUnseen', async () => {
     it('should remove episode from seen', async () => {
       const user = await userService.create(generateUser());
+      const watching = await listService.create({ label: 'En cours', owner: user._id });
       const list = await listService.create({ label: 'testList', owner: user._id });
       const anime = await listService.addAnime({ 
         userId: user._id, 
@@ -323,7 +326,7 @@ describe('Lists', () => {
       await listService.episodeUnseen({
         animeId: '1',
         userId: user._id,
-        listId: list._id,
+        listId: watching._id,
         episodeId: '1'
       });
       const removedEpisode = await Anime.findById(anime._id);
