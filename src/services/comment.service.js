@@ -9,8 +9,12 @@ const badWords = new BadWords({
 });
 badWords.addWords(...frenchBadwordsList.array);
 
+const isProfane = (content) => {
+  return isProfane(content);
+};
+
 const create = async (contentBody) => {
-  if (badWords.isProfane(contentBody.content)) {
+  if (isProfane(contentBody.content)) {
     throw new Error('Your comment contains bad words');
   }
   return Comment.create(contentBody);
@@ -24,6 +28,7 @@ const update = async (id, userdId, reqBody) => {
   if (!comment) {
     throw new Error('You are not the owner of this comment');
   }
+
   return Comment.findOneAndUpdate({
     _id: id
   }, reqBody, {
