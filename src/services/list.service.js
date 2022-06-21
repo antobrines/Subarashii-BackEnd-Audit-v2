@@ -4,7 +4,7 @@ const animeService = require('./anime.service');
 
 const getUserLists = async ({ userId, containing }) => {
   if (containing) {
-    const anime = await Anime.findOne({ id: containing });
+    const anime = await Anime.findOne({ owner: userId, id: containing });
     return anime.list;
   } else {
     return List.find({ owner: userId });  
