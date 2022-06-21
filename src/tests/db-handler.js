@@ -31,8 +31,6 @@ const clearDatabase = async () => {
   }
 };
 
-module.exports = {
-  connect,
-  closeDatabase,
-  clearDatabase
-};
+before(async () => await connect());
+afterEach(async () => await clearDatabase());
+after(async () => await closeDatabase());

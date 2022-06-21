@@ -1,4 +1,3 @@
-const dbHandler = require('./db-handler');
 const userService = require('../services/user.service');
 const assert = require('assert');
 const {
@@ -7,11 +6,6 @@ const {
 const {
   faker
 } = require('@faker-js/faker');
-
-
-before(async () => await dbHandler.connect());
-afterEach(async () => await dbHandler.clearDatabase());
-after(async () => await dbHandler.closeDatabase());
 
 const generateUser = () => {
   const password = faker.internet.password();
