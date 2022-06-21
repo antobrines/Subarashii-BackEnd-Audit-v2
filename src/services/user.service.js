@@ -67,7 +67,8 @@ const login = async (req) => {
   const accessToken = await jwt.sign({
     email: user.email,
     username: user.username,
-    userId: user._id
+    userId: user._id,
+    roles: user.roles
   }, config.token.secret);
 
   const test = await compareAsync(password, user.password);
