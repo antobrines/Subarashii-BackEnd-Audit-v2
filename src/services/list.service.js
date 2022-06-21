@@ -19,7 +19,7 @@ const getListAnimes = async ({ userId, listId }) => {
     throw new Error('List not found');
   }
   if (!list.owner.equals(userId)) {
-    throw new Error('You cannot update this list');
+    throw new Error('You cannot access this list');
   }
   //const animesPerPage = 6;
   const animesPage = await Anime.find({
@@ -32,7 +32,7 @@ const getListAnimes = async ({ userId, listId }) => {
 };
 
 const getAllAnimes = async ({ userId }) => {
-  const lists = await getUserLists(userId);
+  const lists = await getUserLists({ userId });
   const animes = Anime.find({
     list: {
       $in: lists.map((l) => l._id),
@@ -86,7 +86,6 @@ const addAnime = async ({ listId, animeId, animeCategories, userId }) => {
     id: animeId,
     list: listId,
   });
-  console.log(animeExists);
   if (animeExists) {
     throw new Error('Anime already in list');
   }

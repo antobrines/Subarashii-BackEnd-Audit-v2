@@ -15,7 +15,7 @@ const banService = require('./ban.service');
 
 const create = async (userBody) => {
   if (userBody.password)
-    userBody.password = bcrypt.hashSync(userBody.password, 10);
+    userBody.password = await bcrypt.hashSync(userBody.password, 10);
   return User.create(userBody);
 };
 
@@ -46,12 +46,11 @@ const compareAsync = (param1, param2) => {
   });
 };
 
-const login = async (req) => {
+const login = async (body) => {
   const {
     email,
     password
-  } = req.body;
-
+  } = body;
   const user = await User.findOne({
     email: email
   });
@@ -69,7 +68,7 @@ const login = async (req) => {
     username: user.username,
     userId: user._id,
     roles: user.roles
-  }, config.token.secret);
+  }, config.token.secret || 'c2prZG5ma25zZGtjcWtzLGRma2xkc2Y=');
 
   const test = await compareAsync(password, user.password);
   if (test) {
@@ -79,22 +78,21 @@ const login = async (req) => {
   }
 };
 
-const updatePassword = async (req) => {
-  const user = req.user;
+const updatePassword = async (userId, body) => {
 
   const filter = {
-    _id: user.userId
+    _id: userId
   };
 
   const userFromDB = await User.findOne(filter);
 
-  const hasSamePassword = await compareAsync(req.body.previousPassword, userFromDB.password);
+  const hasSamePassword = await compareAsync(body.previousPassword, userFromDB.password);
 
   if (hasSamePassword === false) {
     return 'Password do not match';
   }
 
-  userFromDB.password = bcrypt.hashSync(req.body.password, 10);
+  userFromDB.password = bcrypt.hashSync(body.password, 10);
 
   const success = await userFromDB.save();
   if (!success) {
@@ -163,30 +161,14 @@ const resetPassword = async (requestBody) => {
   }
 };
 
-const update = async (req) => {
-  const user = req.user;
+const update = async (userId, body) => {
   const filter = {
-    _id: user.userId
+    _id: userId
   };
 
-  let userFromDB = await User.findOne(filter, {
-    roles: 0,
-    password: 0
+  return await User.findOneAndUpdate(filter, body, {
+    new: true
   });
-
-  if (userFromDB) {
-    const newUsername = req.body.username;
-    const newEmail = req.body.email;
-
-    userFromDB.username = newUsername ? newUsername : userFromDB.username;
-    userFromDB.email = newEmail ? newEmail : userFromDB.email;
-
-    const result = userFromDB.save();
-    if (result) {
-      return userFromDB;
-    }
-  }
-  return 'Error when saving data';
 };
 
 const getAllUsers = async (pagination, search) => {

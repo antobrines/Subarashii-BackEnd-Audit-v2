@@ -14,7 +14,7 @@ const register = catchAsync(async (req, res, next) => {
 });
 
 const login = catchAsync(async (req, res, next) => {
-  const varLogged = await userService.login(req);
+  const varLogged = await userService.login(req.body);
   if (varLogged === 'Invalid Credentiel') {
     const error = new Error('L\'adresse mail ou le mot de passe est invalide');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
@@ -28,7 +28,7 @@ const login = catchAsync(async (req, res, next) => {
 });
 
 const updatePassword = catchAsync(async (req, res, next) => {
-  const varLogged = await userService.updatePassword(req);
+  const varLogged = await userService.updatePassword(req.user.userId, req.body);
   if (varLogged === 'Password do not match') {
     const error = new Error('Le mot de passe renseigné ne correspond pas au précédent');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
@@ -41,7 +41,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
 });
 
 const update = catchAsync(async (req, res, next) => {
-  const varLogged = await userService.update(req);
+  const varLogged = await userService.update(req.user.userId, req.body);
   if (varLogged === 'Error when saving data') {
     const error = new Error('Une erreur est survenue lors de la mise à jour des données');
     errorF(error.message, error, httpStatus.BAD_REQUEST, res, next);
