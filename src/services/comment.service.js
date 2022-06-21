@@ -11,7 +11,7 @@ const badWords = new BadWords({
 badWords.addWords(...frenchBadwordsList.array);
 
 const isProfane = (content) => {
-  return isProfane(content);
+  return badWords.isProfane(content);
 };
 
 const create = async (contentBody) => {
@@ -149,5 +149,6 @@ module.exports = {
   getUserComments,
   likeComment,
   dislikeComment,
-  getNumberOfCommentsLiked
+  getNumberOfCommentsLiked,
+  isProfane
 };

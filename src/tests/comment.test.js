@@ -1,4 +1,3 @@
-const dbHandler = require('./db-handler');
 const {
   faker
 } = require('@faker-js/faker');
@@ -18,8 +17,12 @@ const generateUser = () => {
 }
 
 const generateComment = (userId) => {
+  let content = faker.lorem.sentence();
+  while (commentService.isProfane(content)) {
+    content = faker.lorem.sentence();
+  }
   return {
-    content: faker.lorem.sentence(),
+    content: content,
     animeId: faker.random.numeric(),
     userId: userId,
   };
@@ -34,6 +37,18 @@ describe('Comments', () => {
     const newComment = await commentService.create(comment);
     assert.equal(newComment.content, comment.content);
     assert.equal(newComment.userId, comment.userId);
+  }).timeout(5000);
+
+  it('create with bad words', async () => {
+    const user = generateUser();
+    const newUser = await userService.create(user);
+    const comment = generateComment(newUser._id);
+    comment.content = 'Connasse';
+    try {
+      await commentService.create(comment);
+    } catch (error) {
+      assert.equal(error.message, 'Your comment contains bad words');
+    }
   }).timeout(5000);
 
   it('update', async () => {
@@ -93,8 +108,12 @@ describe('Comments', () => {
     const newUser = await userService.create(user);
     const animeId = faker.random.numeric();
     for (let i = 0; i < 10; i++) {
+      let content = faker.lorem.sentence();
+      while (commentService.isProfane(content)) {
+        content = faker.lorem.sentence();
+      }
       const comment = {
-        content: faker.lorem.sentence(),
+        content: content,
         animeId: animeId,
         userId: newUser._id,
       }
@@ -109,6 +128,10 @@ describe('Comments', () => {
     const newUser = await userService.create(user);
     const animeId = faker.random.numeric();
     for (let i = 0; i < 10; i++) {
+      let content = faker.lorem.sentence();
+      while (commentService.isProfane(content)) {
+        content = faker.lorem.sentence();
+      }
       const comment = {
         content: faker.lorem.sentence(),
         animeId: animeId,
