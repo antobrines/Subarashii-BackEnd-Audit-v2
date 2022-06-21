@@ -15,7 +15,7 @@ const getStat = async (userId) => {
 };
 
 const getCommentStat = async (userId) => {
-  const nbComments = await commentService.getMyComment(userId);
+  const nbComments = await commentService.getUserComments(userId);
   const nbCommentsLiked = await commentService.getNumberOfCommentsLiked(userId);
   return {
     nbComments: nbComments.length,
