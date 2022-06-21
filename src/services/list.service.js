@@ -2,26 +2,20 @@ const List = require('../models/list.model');
 const Anime = require('../models/anime.model');
 const animeService = require('./anime.service');
 
-const getUserLists = async ({
-  userId,
-  containing
-}) => {
+const getUserLists = async ({ userId, containing }) => {
   if (containing) {
     const anime = await Anime.findOne({
-      id: containing
+      id: containing,
     });
     return anime.list;
   } else {
     return List.find({
-      owner: userId
+      owner: userId,
     });
   }
 };
 
-const getListAnimes = async ({
-  userId,
-  listId
-}) => {
+const getListAnimes = async ({ userId, listId }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -31,62 +25,58 @@ const getListAnimes = async ({
   }
   //const animesPerPage = 6;
   const animesPage = await Anime.find({
-    list: listId
+    list: listId,
   });
   //const animesPage = animes.slice((page - 1) * animesPerPage, page * animesPerPage);
-  return Promise.all(animesPage.map(anime => animeService.getAnimeById(anime.id)));
+  return Promise.all(
+    animesPage.map((anime) => animeService.getAnimeById(anime.id))
+  );
 };
 
-const getAllAnimes = async ({
-  userId
-}) => {
+const getAllAnimes = async ({ userId }) => {
   const lists = await getUserLists(userId);
   const animes = Anime.find({
     list: {
-      $in: lists.map(l => l._id)
-    }
+      $in: lists.map((l) => l._id),
+    },
   });
   return animes;
 };
 
-const create = async list => List.create(list);
+const create = async (list) => List.create(list);
 
-const createDefault = async userId => {
-  const defaultLists = [{
+const createDefault = async (userId) => {
+  const defaultLists = [
+    {
       label: 'À voir',
       deletable: false,
-      owner: userId
+      owner: userId,
     },
     {
       label: 'En cours',
       deletable: false,
-      owner: userId
+      owner: userId,
     },
     {
       label: 'Terminée',
       deletable: false,
-      owner: userId
+      owner: userId,
     },
     {
       label: 'En attente',
       deletable: false,
-      owner: userId
+      owner: userId,
     },
     {
       label: 'Favoris',
       deletable: false,
-      owner: userId
+      owner: userId,
     },
   ];
   await List.insertMany(defaultLists);
 };
 
-const addAnime = async ({
-  listId,
-  animeId,
-  animeCategories,
-  userId
-}) => {
+const addAnime = async ({ listId, animeId, animeCategories, userId }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -96,8 +86,9 @@ const addAnime = async ({
   }
   const animeExists = await Anime.findOne({
     id: animeId,
-    list: listId
+    list: listId,
   });
+  console.log(animeExists);
   if (animeExists) {
     throw new Error('Anime already in list');
   }
@@ -112,11 +103,7 @@ const addAnime = async ({
   return anime;
 };
 
-const removeAnime = async ({
-  listId,
-  animeId,
-  userId
-}) => {
+const removeAnime = async ({ listId, animeId, userId }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -126,7 +113,7 @@ const removeAnime = async ({
   }
   const anime = await Anime.findOne({
     id: animeId,
-    list: listId
+    list: listId,
   });
   if (!anime) {
     throw new Error('Anime not found in this list');
@@ -135,10 +122,7 @@ const removeAnime = async ({
   await anime.remove();
 };
 
-const remove = async ({
-  listId,
-  userId
-}) => {
+const remove = async ({ listId, userId }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -147,17 +131,12 @@ const remove = async ({
     throw new Error('You cannot delete this list');
   }
   await Anime.deleteMany({
-    list: listId
+    list: listId,
   });
   await list.remove();
 };
 
-const episodeSeen = async ({
-  listId,
-  animeId,
-  episodeId,
-  userId
-}) => {
+const episodeSeen = async ({ listId, animeId, episodeId, userId }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -167,7 +146,7 @@ const episodeSeen = async ({
   }
   const anime = await Anime.findOne({
     id: animeId,
-    list: listId
+    list: listId,
   });
   if (!anime) {
     throw new Error('Anime not found in this list');
@@ -178,7 +157,7 @@ const episodeSeen = async ({
   if (anime.episodesWatched.length === 0) {
     const watchingList = await List.findOne({
       label: 'En cours',
-      owner: userId
+      owner: userId,
     });
     anime.list = watchingList._id;
   } else {
@@ -186,7 +165,7 @@ const episodeSeen = async ({
     if (anime.episodesWatched === animeDetails.number_of_episodes) {
       const seenList = await List.findOne({
         label: 'Terminée',
-        owner: userId
+        owner: userId,
       });
       anime.list = seenList._id;
     }
@@ -196,12 +175,7 @@ const episodeSeen = async ({
   return anime.save();
 };
 
-const episodeUnseen = async ({
-  listId,
-  animeId,
-  episodeId,
-  userId
-}) => {
+const episodeUnseen = async ({ listId, animeId, episodeId, userId }) => {
   const list = await List.findById(listId);
   if (!list) {
     throw new Error('List not found');
@@ -211,7 +185,7 @@ const episodeUnseen = async ({
   }
   const anime = await Anime.findOne({
     id: animeId,
-    list: listId
+    list: listId,
   });
   if (!anime) {
     throw new Error('Anime not found in this list');
@@ -219,7 +193,9 @@ const episodeUnseen = async ({
   if (!anime.episodesWatched.includes(episodeId)) {
     throw new Error('Episode not seen');
   }
-  anime.episodesWatched = anime.episodesWatched.filter(a => a !== String(episodeId));
+  anime.episodesWatched = anime.episodesWatched.filter(
+    (a) => a !== String(episodeId)
+  );
 
   return anime.save();
 };
