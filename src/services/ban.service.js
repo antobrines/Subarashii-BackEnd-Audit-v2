@@ -26,10 +26,7 @@ const ban = async (userId, date, reason) => {
 
 const unban = async (userId) => {
   const bans = await Ban.find({
-    userId: userId,
-    date: {
-      $gte: new Date()
-    }
+    userId: userId
   });
   if (bans.length > 0) {
     bans.forEach(async ban => {
